@@ -7,8 +7,7 @@ body                 { font: 16px Georgia, serif; }
 
 section > div        { padding: 20px; }
 
-div .wrapper		 { text-align: center;}
-div .authors		 { margin: 20px; float:left;}
+div .authors		 { text-align: center; margin: 20px; float:left;}
 
 header, nav, section { background: #eee; text-align: center;}
 footer               { background: #eee; text-align: center;}
