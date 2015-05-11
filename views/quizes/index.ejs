@@ -1,7 +1,15 @@
 <form method="get" action="/quizes">
-	<input type="text" name="search" value="Pregunta" />
+	<input type="text" name="search" value="Buscar preguntas" />
 	<input type="submit" value="Search">
 </form>
+
+<%
+	if (busqueda){
+%>
+	<h3>Preguntas con "<%= busqueda %>"</h3>
+<%
+	}
+%>
 
 <table>
 <% 
