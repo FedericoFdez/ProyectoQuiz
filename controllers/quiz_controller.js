@@ -3,7 +3,9 @@ var models = require('../models/models.js');
 // GET /quizes
 exports.index = function(req, res) {
 	if(req.query.search){
-		models.Quiz.findAll({where: ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')]}).then(function(quizes) {
+		models.Quiz.findAll({	where: ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')],
+								order: 'pregunta ASC'
+							}).then(function(quizes) {
 			res.render('quizes/index.ejs',{quizes:quizes, busqueda:req.query.search});
 		});
 	}
