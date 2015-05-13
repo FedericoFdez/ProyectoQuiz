@@ -1,4 +1,5 @@
 node_modules
 npm-debug.log
 public/images/Thumbs.db
+config/config.json
 quiz.sqlite
