@@ -1,7 +1,7 @@
 module.exports = {
   up: function (migration, DataTypes, done) {
         migration.createTable(
-          'Quiz', { id:       { type: DataTypes.INTEGER,
+          'Quizzes', { id:       { type: DataTypes.INTEGER,
                                 allowNull: false,
                                 primaryKey: true,
                                 autoIncrement: true,
@@ -17,7 +17,7 @@ module.exports = {
         .complete(done);
   },
     down: function (migration, DataTypes, done) {
-      migration.dropTable('Quiz')
+      migration.dropTable('Quizzes')
       .complete(done);
     }
   }
