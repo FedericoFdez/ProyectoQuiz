@@ -17,7 +17,7 @@ module.exports = {
         .complete(done);
   },
     down: function (migration, DataTypes, done) {
-      migration.dropTable('Posts')
+      migration.dropTable('Quiz')
       .complete(done);
     }
   }
