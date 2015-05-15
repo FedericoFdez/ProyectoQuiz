@@ -30,7 +30,15 @@ var sequelize = new Sequelize(DB_name, user, pwd,
 var quiz_path = path.join(__dirname,'quiz');
 var Quiz = sequelize.import(quiz_path);
 
+// Importar la definición de la tabla Comment en comment.js
+var comment_path = path.join(__dirname,'comment');;
+var Comment = sequelize.import(comment_path);
+
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
+
 exports.Quiz = Quiz; // exportar definición de tabla Quiz 
+exports.Comment = Comment;
 
 Quiz.count().then(function (count){
 	if(count === 0) {	// la tabla se inicializa solo si está vacía

@@ -1,17 +1,16 @@
 module.exports = {
   up: function (migration, DataTypes, done) {
         migration.createTable(
-          'Quizzes', { id:    { type: DataTypes.INTEGER,
+          'Comments', { id:   { type: DataTypes.INTEGER,
                                 allowNull: false,
                                 primaryKey: true,
                                 autoIncrement: true,
                                 unique: true },
-                    pregunta: { type: DataTypes.STRING,
-                                validate: { notEmpty: {msg: "· Falta Pregunta"}}
+                        texto:{ type: DataTypes.STRING,
+                                validate: { notEmpty: {msg: "· Falta Comentario"}}
                               },
-                    respuesta:{ type: DataTypes.STRING,
-                                validate: { notEmpty: {msg: "· Falta Respuesta"}}
-                              },
+                        QuizId:{type: DataTypes.INTEGER,
+                                allowNull:false},
                     createdAt:{ type: DataTypes.DATE,
                                 allowNull: false},
                     updatedAt:{ type: DataTypes.DATE,
@@ -21,8 +20,8 @@ module.exports = {
         );
         done();
   },
-    down: function (migration, DataTypes, done) {
-      migration.dropTable('Quizzes');
+  down: function (migration, DataTypes, done) {
+      migration.dropTable('Comments');
       done();
     }
-}
+  }
