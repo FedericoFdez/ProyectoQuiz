@@ -32,7 +32,7 @@ app.use(session({
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helpers dinámicos:
+// MW de Helpers dinámicos
 app.use(function(req,res,next) {
     // guardar path en session.redir para después de login
     if (!req.path.match(/\/login|\/logout/)) {
@@ -40,6 +40,18 @@ app.use(function(req,res,next) {
     }
     // hacer visible req.session en las vistas
     res.locals.session = req.session;
+    next();
+});
+
+// MW de auto-logout si pasaron más de 2 minutos desde la última transacción de la sesión
+app.use(function(req,res,next) {
+    var currentTime = new Date().getTime();
+    if(req.session.user){
+        if( currentTime >= (req.session.user.lastSeen + 5000) )
+            delete req.session.user;
+        else
+            req.session.user.lastSeen = currentTime;
+    }
     next();
 });
 
