@@ -102,7 +102,10 @@ exports.update = function(req,res){
 
 // DELETE /quizes/:id
 exports.destroy = function(req,res){
+	for(index in req.quiz.Comments){
+		req.quiz.Comments[index].destroy();
+	}
 	req.quiz.destroy().then(function() {
-		res.redirect('/quizes');
+			res.redirect('/quizes');
 	}).catch(function(error){next(error)});
 };
