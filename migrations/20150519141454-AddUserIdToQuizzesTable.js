@@ -4,7 +4,7 @@ module.exports = {
     done();
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function (migration, DataTypes, done) {
     migration.removeColumn('Quizzes','UserId');
     done();
   }
