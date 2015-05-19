@@ -47,7 +47,7 @@ app.use(function(req,res,next) {
 app.use(function(req,res,next) {
     var currentTime = new Date().getTime();
     if(req.session.user){
-        if( currentTime >= (req.session.user.lastSeen + 5000) )
+        if( currentTime >= (req.session.user.lastSeen + 120000) )
             delete req.session.user;
         else
             req.session.user.lastSeen = currentTime;
