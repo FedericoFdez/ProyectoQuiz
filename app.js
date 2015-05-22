@@ -34,10 +34,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // MW de Helpers dinámicos
 app.use(function(req,res,next) {
+    // si no existe, lo inicializa
+    if (!req.session.redir){
+        req.session.redir='/';
+    }
+    
     // guardar path en session.redir para después de login
-    if (!req.path.match(/\/login|\/logout/)) {
+    if (!req.path.match(/\/login|\/logout|\/user/)) {
         req.session.redir = req.path;
     }
+
     // hacer visible req.session en las vistas
     res.locals.session = req.session;
     next();
