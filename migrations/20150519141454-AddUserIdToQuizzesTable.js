@@ -1,6 +1,8 @@
 module.exports = {
   up: function (migration, DataTypes, done) {
-    migration.addColumn('Quizzes','UserId',{type: DataTypes.BOOLEAN});
+    migration.addColumn('Quizzes','UserId',{type: DataTypes.INTEGER,
+    										defaultValue: 1,
+    										allowNull: false});
     done();
   },
 
