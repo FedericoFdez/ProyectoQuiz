@@ -17,6 +17,8 @@ nav span             	{ 	margin: 0px 10px 0px 0px;}
 
 .right				 	{ 	float: right;}
 
+.quiz_img				{	height: 150px; float:left; }
+
 table				 	{ 	margin-left: auto;
 					   		margin-right: auto;}
 td					 	{ 	padding: 5px;}

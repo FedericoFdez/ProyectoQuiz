@@ -3,3 +3,4 @@ npm-debug.log
 public/images/Thumbs.db
 config/config.json
 quiz.sqlite
+public/media
