@@ -1,7 +1,3 @@
-// Modelo de User con validación y encriptación de passwords
-var crypto  = require('crypto');
-var key   = process.env.PASSWORD_ENCRYPTION_KEY;
-
 module.exports = {
   up: function (migration, DataTypes, done) {
     migration.createTable(
@@ -11,29 +7,8 @@ module.exports = {
                             autoIncrement: true,
                             unique: true },
               username:{    type: DataTypes.STRING,
-                            unique: true,
-                            validate:{  notEmpty: {msg: "· Falta username"},
-                                        // -> devuelve mensaje de error si username ya existe
-                                        isUnique: function(value,next){
-                                          var self = this;
-                                          User
-                                          .find({where: {username:value}})
-                                          .then(function(user){
-                                            if (user && self.id !== user.id){
-                                              return next('Username ya utilizado');
-                                            }
-                                            return next();
-                                          }).catch(function(err){return next(err);}); } }},
-              password:{    type: DataTypes.STRING,
-                            validate:{  notEmpty: {msg: ": Falta password"} },
-                            set: function(password){
-                              var encripted = crypto
-                                              .createHmac('sha1',key)
-                                              .update(password)
-                                              .digest('hex');
-                               // Evita passwords vacíos
-                              if (password === '') {encripted ='';}
-                              this.setDataValue('password',encripted); } },
+                            unique: true},
+              password:{    type: DataTypes.STRING },
               isAdmin:{     type: DataTypes.BOOLEAN,
                             defaultValue:false},
             createdAt:{     type: DataTypes.DATE,
@@ -41,12 +16,7 @@ module.exports = {
             updatedAt:{     type: DataTypes.DATE,
                             allowNull: false}
           },
-        {
-      instanceMethods:{     verifyPassword: function(password){
-                              var encripted = crypto.createHmac('sha1', key).update(password).digest('hex');
-                              return encripted === this.password;} }
-        },
-        { sync: {force:true} }
+          { sync: {force:true} }
     );
 
     done();
