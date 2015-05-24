@@ -1,4 +1,10 @@
-<form method="get" action="/quizes">
+<form method="get" action="
+						<% if(propios){ %>
+							/user/<%=session.user.id%>/quizes
+						<% } else { %>
+							/quizes
+						<% } %>
+						">
 	<input type="text" name="search" value="Buscar preguntas" />
 	<input type="submit" value="Search">
 </form>

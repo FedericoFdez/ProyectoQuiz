@@ -1,5 +1,7 @@
 var models = require('../models/models.js');
+
 var cloudinary = require('cloudinary');
+var Sequelize = require('sequelize');
 
 // MW que permite acciones solamente si el quiz objeto
 // pertenece al usuario logeado o si es cuenta admin
@@ -30,42 +32,41 @@ exports.load = function(req,res,next,quizId){
 };
 
 // GET /quizes
+// GET /users/:userId/quizes
 exports.index = function(req, res) {
 	var options = {};
-	//var quizes = {};
-	//var j = 0;
-	if (req.user){
+
+	if (req.user){ // req.user es creado por autoload de usuario si la ruta lleva el parámetro :userId
+
 		if(req.query.search){
-			models.Quiz.findAll({where: ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')], 
-								order: 'pregunta ASC'
-								}).then(function(q) { 
-				//for (i in q) {
-				//	if (q[i].UserId === req.user.id) {
-				//		quizes[j] = q[i];
-				//		j++;
-				//	}
-				//}
-				options.where = {UserId: req.user.id};	
-				q.findAll(options).then(function(quizes) {
-					res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
-				});
-			}).catch(function(error){next(error)});			
+			options.where = Sequelize.and(
+								{UserId: req.user.id},
+								["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')]
+							);
+			options.order = 'pregunta ASC';
+			models.Quiz.findAll(options).then(function(quizes) {	 
+				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:true, errors: []});
+			}).catch(function(error){next(error)});	
+		
 		} else {
 			options.where = {UserId: req.user.id};
 			models.Quiz.findAll(options).then(function(quizes) {
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
+				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:true, errors: []});
 			});
 		}
+
 	} else {
+
 		if(req.query.search){
-			models.Quiz.findAll({where: ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')], 
-								order: 'pregunta ASC'
-								}).then(function(quizes) { 
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
+			options.where = ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')];
+			options.order = 'pregunta ASC';
+			models.Quiz.findAll(options).then(function(quizes) { 
+				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:false, errors: []});
 			}).catch(function(error){next(error)});			
+		
 		} else{
 			models.Quiz.findAll().then(function(quizes) {
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors:[]});
+				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:false, errors:[]});
 			});
 		}
 	}
@@ -204,29 +205,4 @@ exports.destroy = function(req,res){
 	req.quiz.destroy().then(function() {
 			res.redirect('/quizes');
 	}).catch(function(error){next(error)});
-};
-
-// GET /user/:id/quizes/favoritos
-exports.favorites = function(req, res) {
-	var options = {};
-	if (req.user){
-		options.where = {UserId: req.user.id};	
-		var quizes = {};
-		var j=0;
-		models.Quiz.findAll(options).then(function(q) {
-			for (i in q) {
-				if (q[i].UserId === req.user.id) {
-					quizes[j] = q[i];
-					j++;
-				}
-			}
-			res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
-				});
-			}).catch(function(error){next(error)});			
-		} else {
-			options.where = {UserId: req.user.id};
-			models.Quiz.findAll(options).then(function(quizes) {
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
-			});
-		}
 };
