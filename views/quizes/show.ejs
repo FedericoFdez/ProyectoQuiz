@@ -1,5 +1,5 @@
 <% if(quiz.image){%>
-	<p><img class="quiz_img" src="/media/<%=quiz.image%>"></p>
+	<p><%- cloudinary.image(quiz.image, { alt:"Imagen relacionada con la pregunta", class:"quiz_img" })%></p>
 <% } %>
 
 <form method="get" action="/quizes/<%= quiz.id %>/answer">

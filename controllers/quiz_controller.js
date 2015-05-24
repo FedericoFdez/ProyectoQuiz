@@ -1,4 +1,5 @@
 var models = require('../models/models.js');
+var cloudinary = require('cloudinary');
 
 // MW que permite acciones solamente si el quiz objeto
 // pertenece al usuario logeado o si es cuenta admin
@@ -56,28 +57,50 @@ exports.new = function(req,res) {
 // POST /quizes/create
 exports.create = function(req,res) {
 	req.body.quiz.UserId = req.session.user.id;
-	if (req.files.image) {
-		req.body.quiz.image = req.files.image.name;
-	}
 	var quiz = models.Quiz.build( req.body.quiz );
-	quiz.validate()
-	.then(
-		function(err){
-			if(err) {
-				res.render('quizes/new', {quiz: quiz, errors: err.errors});
-			} else {
-				quiz // guarda en DB los campos pregunta y respuesta de quiz
-				.save({fields: ["pregunta", "respuesta", "UserId", "image"]})
-				.then(function(){ res.redirect('/quizes')});
-					// Redirección HTTP (URL relativo) a la lista de preguntas
+
+	if (req.files.image) {
+		cloudinary.uploader.upload(
+			req.files.image.path, function(result) { 
+				console.log(result);
+				req.body.quiz.image = result.public_id;
+
+				quiz.validate()
+					.then(
+						function(err){
+							if(err) {
+								res.render('quizes/new', {quiz: quiz, errors: err.errors});
+							} else {
+								quiz // guarda en DB los campos pregunta y respuesta de quiz
+								.save({fields: ["pregunta", "respuesta", "UserId", "image"]})
+								.then(function(){ res.redirect('/quizes')});
+									// Redirección HTTP (URL relativo) a la lista de preguntas
+							}
+						}
+					);
+			}    
+		);
+	}else{
+		quiz.validate()
+		.then(
+			function(err){
+				if(err) {
+					res.render('quizes/new', {quiz: quiz, errors: err.errors});
+				} else {
+					quiz // guarda en DB los campos pregunta y respuesta de quiz
+					.save({fields: ["pregunta", "respuesta", "UserId", "image"]})
+					.then(function(){ res.redirect('/quizes')});
+						// Redirección HTTP (URL relativo) a la lista de preguntas
+				}
 			}
-		}
-	);
+		);
+	}
 };
 
 // GET /quizes/:id
 exports.show = function(req, res) {
 	models.Quiz.find(req.params.quizId).then(function(quiz) {
+		console.log(quiz.image);
 		res.render('quizes/show', { quiz: req.quiz, errors:[]});	
 	})
 };
@@ -102,24 +125,46 @@ exports.edit = function(req,res){
 // PUT /quizes/:id
 exports.update = function(req,res){
 	if (req.files.image) {
-		console.log("Hay una imagen!");
-		req.quiz.image = req.files.image.name;
-	}
-	req.quiz.pregunta = req.body.quiz.pregunta;
-	req.quiz.respuesta = req.body.quiz.respuesta;
-	req.quiz.validate()
-	.then(
-		function(err){
-			if(err) {
-				res.render('quizes/new', {quiz: req.quiz, errors: err.errors});
-			} else {
-				req.quiz // guarda en DB los campos pregunta y respuesta de quiz
-				.save({fields: ["pregunta", "respuesta", "image"]})
-				.then(function(){ res.redirect('/quizes')});
-					// Redirección HTTP (URL relativo) a la lista de preguntas
+		cloudinary.uploader.upload(
+			req.files.image.path, function(result) { 
+				console.log(result);
+				console.log("PUBLIC_ID: "+result.public_id);
+				req.quiz.image = result.public_id;
+
+				req.quiz.pregunta = req.body.quiz.pregunta;
+				req.quiz.respuesta = req.body.quiz.respuesta;
+				req.quiz.validate()
+				.then(
+					function(err){
+						if(err) {
+							res.render('quizes/new', {quiz: req.quiz, errors: err.errors});
+						} else {
+							req.quiz // guarda en DB los campos pregunta y respuesta de quiz
+							.save({fields: ["pregunta", "respuesta", "image"]})
+							.then(function(){ res.redirect('/quizes')});
+								// Redirección HTTP (URL relativo) a la lista de preguntas
+						}
+					}
+				);
+			}    
+		);
+	}else{
+		req.quiz.pregunta = req.body.quiz.pregunta;
+		req.quiz.respuesta = req.body.quiz.respuesta;
+		req.quiz.validate()
+		.then(
+			function(err){
+				if(err) {
+					res.render('quizes/new', {quiz: req.quiz, errors: err.errors});
+				} else {
+					req.quiz // guarda en DB los campos pregunta y respuesta de quiz
+					.save({fields: ["pregunta", "respuesta", "image"]})
+					.then(function(){ res.redirect('/quizes')});
+						// Redirección HTTP (URL relativo) a la lista de preguntas
+				}
 			}
-		}
-	);
+		);
+	}
 };
 
 // DELETE /quizes/:id
@@ -127,6 +172,10 @@ exports.destroy = function(req,res){
 	for(index in req.quiz.Comments){
 		req.quiz.Comments[index].destroy();
 	}
+
+	if(req.quiz.image)
+		cloudinary.uploader.destroy(req.quiz.image, function(result) {});
+	
 	req.quiz.destroy().then(function() {
 			res.redirect('/quizes');
 	}).catch(function(error){next(error)});

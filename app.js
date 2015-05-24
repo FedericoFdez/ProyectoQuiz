@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var cloudinary = require('cloudinary');
+
 var partials = require('express-partials');
 var methodOverride = require('method-override');
 var session = require('express-session');
@@ -46,6 +48,7 @@ app.use(function(req,res,next) {
 
     // hacer visible req.session en las vistas
     res.locals.session = req.session;
+    res.locals.cloudinary = cloudinary;
     next();
 });
 
