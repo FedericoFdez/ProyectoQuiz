@@ -17,7 +17,11 @@ module.exports = function(sequelize, DataTypes) {
 					  	},
 			  image:    {
 			  				type: DataTypes.STRING
-			  			}
+			  			}, 
+			  isFavorite: {
+			  				type: DataTypes.BOOLEAN, 
+			  				defaultValue: false
+			  }
 			}
 	);
 };

@@ -29,17 +29,24 @@ exports.load = function(req,res,next,quizId){
 				}).catch(function(error) { next(error);});
 };
 
-
 // GET /quizes
 exports.index = function(req, res) {
 	var options = {};
+	//var quizes = {};
+	//var j = 0;
 	if (req.user){
 		if(req.query.search){
 			models.Quiz.findAll({where: ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')], 
 								order: 'pregunta ASC'
 								}).then(function(q) { 
+				//for (i in q) {
+				//	if (q[i].UserId === req.user.id) {
+				//		quizes[j] = q[i];
+				//		j++;
+				//	}
+				//}
 				options.where = {UserId: req.user.id};	
-				q.find(options).then(function(quizes) {
+				q.findAll(options).then(function(quizes) {
 					res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
 				});
 			}).catch(function(error){next(error)});			
@@ -197,4 +204,29 @@ exports.destroy = function(req,res){
 	req.quiz.destroy().then(function() {
 			res.redirect('/quizes');
 	}).catch(function(error){next(error)});
+};
+
+// GET /user/:id/quizes/favoritos
+exports.favorites = function(req, res) {
+	var options = {};
+	if (req.user){
+		options.where = {UserId: req.user.id};	
+		var quizes = {};
+		var j=0;
+		models.Quiz.findAll(options).then(function(q) {
+			for (i in q) {
+				if (q[i].UserId === req.user.id) {
+					quizes[j] = q[i];
+					j++;
+				}
+			}
+			res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
+				});
+			}).catch(function(error){next(error)});			
+		} else {
+			options.where = {UserId: req.user.id};
+			models.Quiz.findAll(options).then(function(quizes) {
+				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, errors: []});
+			});
+		}
 };

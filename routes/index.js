@@ -35,6 +35,8 @@ router.get('/user/:userId(\\d+)/edit',		sessionController.loginRequired, userCon
 router.put('/user/:userId(\\d+)',			sessionController.loginRequired, userController.ownershipRequired, userController.update);
 router.delete('/user/:userId(\\d+)',		sessionController.loginRequired, userController.ownershipRequired, userController.destroy);
 router.get('/user/:userId(\\d+)/quizes',    quizController.index);
+router.get('/user/:userId(\\d+)/quizes/favoritos', 
+											sessionController.loginRequired, userController.ownershipRequired, quizController.favorites);
 // Definición de rutas de /quizes
 router.get('/quizes',						quizController.index);
 router.get('/quizes/:quizId(\\d+)',			quizController.show);
