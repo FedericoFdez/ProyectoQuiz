@@ -10,9 +10,14 @@ module.exports = function(sequelize, DataTypes) {
 			  				type: DataTypes.STRING,
 			  				validate: { notEmpty: {msg: "· Falta Respuesta"}}
 			  			},
-			  	image:  {
+			  UserId:   {
+			  				type: DataTypes.INTEGER,
+    						defaultValue: 1,
+    						allowNull: false
+					  	},
+			  image:    {
 			  				type: DataTypes.STRING
-			  	}
+			  			}
 			}
 	);
 };
