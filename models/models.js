@@ -38,12 +38,18 @@ var Comment = sequelize.import(comment_path);
 var user_path = path.join(__dirname,'user');
 var User = sequelize.import(user_path);
 
+// los comentarios pertenecen a un quiz
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
 // los quizes pertenecen a un usuario registrado
 Quiz.belongsTo(User);
 User.hasMany(Quiz);
+
+// un usuario puede tener varios quizes favoritos
+// y un quiz puede tener varios usuarios que lo hayan marcado como favorito
+User.belongsToMany(Quiz, {through: 'Favourites'});
+Quiz.belongsToMany(User, {through: 'Favourites'});
 
 // exportar tablas
 exports.Quiz = Quiz; 

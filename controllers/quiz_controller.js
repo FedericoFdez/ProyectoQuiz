@@ -1,5 +1,7 @@
 var models = require('../models/models.js');
 
+var Promise = require('bluebird');
+
 var cloudinary = require('cloudinary');
 var Sequelize = require('sequelize');
 
@@ -21,7 +23,8 @@ exports.ownershipRequired = function(req,res,next){
 exports.load = function(req,res,next,quizId){
 	models.Quiz.find({
 						where: { id: Number(quizId) },
-						include: [{model: models.Comment}]
+						include: [{model: models.Comment},
+								  {model: models.User}]
 					})
 				.then(function(quiz) {
 						if (quiz) {
@@ -32,44 +35,72 @@ exports.load = function(req,res,next,quizId){
 };
 
 // GET /quizes
-// GET /users/:userId/quizes
+// GET /user/:userId/quizes
+// async queries inspired by https://gist.github.com/jagged3dge/1ae038cf050662986121
 exports.index = function(req, res) {
 	var options = {};
+	var propios = false;
+	var user = undefined;
 
-	if (req.user){ // req.user es creado por autoload de usuario si la ruta lleva el parámetro :userId
+	if (req.session.user){ // usuario conectado
+		models.User.find({ where: { id: Number(req.session.user.id)},
+					   include: [{model: models.Quiz }] })
+		.then(function(user){
+			
+			if (req.user){ // misPreguntas (req.user es creado por autoload de usuario si la ruta lleva el parámetro :userId)
+				propios = true;
 
-		if(req.query.search){
-			options.where = Sequelize.and(
-								{UserId: req.user.id},
-								["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')]
-							);
-			options.order = 'pregunta ASC';
-			models.Quiz.findAll(options).then(function(quizes) {	 
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:true, errors: []});
-			}).catch(function(error){next(error)});	
-		
-		} else {
-			options.where = {UserId: req.user.id};
+				if(req.query.search){ // ha buscado
+					options.where = Sequelize.and(
+										{UserId: req.user.id},
+										["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')]
+									);
+					options.order = 'pregunta ASC';
+					options.include = { model: models.User };
+				} else { // no ha buscado
+					options.where = {UserId: req.user.id};
+					options.include = { model: models.User };
+				}
+
+			} else { // no misPreguntas
+				if(req.query.search){ 
+					options.where = ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')];
+					options.order = 'pregunta ASC';
+				}
+			}
+
 			models.Quiz.findAll(options).then(function(quizes) {
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:true, errors: []});
-			});
-		}
+				var promises = [];
+				var quiz;
 
+				quizes.forEach(function(q){
+					promises.push(
+						Promise.all([
+							q.hasUser(user)])
+						.spread(function(result){
+							quiz = q.toJSON();
+							quiz.isFavourite = result;
+							return quiz;
+						})
+					);
+				})
+				return Promise.all(promises);
+			}).then(function(quizes){
+				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios: propios, errors: []});
+			}).catch(function(error){next(error)});
+
+		}).catch(function(error){next(error)});
 	} else {
-
 		if(req.query.search){
 			options.where = ["pregunta like ?", req.query.search.replace(/(\s)/g,'%').replace(/^/,'%').replace(/$/,'%')];
 			options.order = 'pregunta ASC';
-			models.Quiz.findAll(options).then(function(quizes) { 
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:false, errors: []});
-			}).catch(function(error){next(error)});			
-		
-		} else{
-			models.Quiz.findAll().then(function(quizes) {
-				res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:false, errors:[]});
-			});
 		}
+
+		models.Quiz.findAll(options).then(function(quizes) {
+			res.render('quizes/index.ejs', {quizes: quizes, busqueda: req.query.search, propios:propios, errors: []});
+		}).catch(function(error){next(error)});
 	}
+
 };
 
 // GET /quizes/new
@@ -88,7 +119,6 @@ exports.create = function(req,res) {
 	if (req.files.image) {
 		cloudinary.uploader.upload(
 			req.files.image.path, function(result) { 
-				console.log(result);
 				req.body.quiz.image = result.public_id;
 
 				quiz.validate()
@@ -125,27 +155,32 @@ exports.create = function(req,res) {
 
 // GET /quizes/:id
 exports.show = function(req, res) {
-	models.Quiz.find(req.params.quizId).then(function(quiz) {
-		console.log(quiz.image);
-		res.render('quizes/show', { quiz: req.quiz, errors:[]});	
-	})
+	if (req.session.user){ // usuario conectado
+		models.User.find({ where: { id: Number(req.session.user.id)},
+					   include: [{model: models.Quiz }] })
+		.then(function(user){
+			req.quiz.hasUser(user).then(function(result){
+				req.quiz.isFavourite = result;
+				res.render('quizes/show', { quiz: req.quiz, errors:[]});
+			}).catch(function(error){next(error)});
+		});
+	} else {
+		res.render('quizes/show', {quiz: req.quiz, errors:[]});
+	}	
 };
 
 // GET /quizes/:id/answer
 exports.answer = function(req, res) {
-	models.Quiz.find(req.params.quizId).then(function(quiz) {
-		if (req.query.respuesta === req.quiz.respuesta) {
-			res.render('quizes/answer', { quiz:req.quiz, respuesta: 'Correcto', errors:[] });
-		} else {
-			res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors:[] });
-		}
-	})
+	if (req.query.respuesta === req.quiz.respuesta) {
+		res.render('quizes/answer', { quiz:req.quiz, respuesta: 'Correcto', errors:[] });
+	} else {
+		res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors:[] });
+	}
 };
 
 // GET /quizes/:id/edit
 exports.edit = function(req,res){
-	var quiz = req.quiz; // autoload da instancia de quiz
-	res.render('quizes/edit',{quiz:quiz, errors:[]});
+	res.render('quizes/edit',{quiz:req.quiz, errors:[]}); // autoload da instancia de quiz
 };
 
 // PUT /quizes/:id
@@ -153,8 +188,6 @@ exports.update = function(req,res){
 	if (req.files.image) {
 		cloudinary.uploader.upload(
 			req.files.image.path, function(result) { 
-				console.log(result);
-				console.log("PUBLIC_ID: "+result.public_id);
 				req.quiz.image = result.public_id;
 
 				req.quiz.pregunta = req.body.quiz.pregunta;

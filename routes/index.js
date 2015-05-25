@@ -7,6 +7,7 @@ var commentController = require('../controllers/comment_controller');
 var sessionController = require('../controllers/session_controller');
 var userController = require('../controllers/user_controller');
 var statisticController = require('../controllers/statistic_controller');
+var favouritesController = require('../controllers/favourites_controller');
 
 // Página de entrada (home page)
 router.get('/', function(req, res) {
@@ -34,9 +35,8 @@ router.post('/user',						userController.create);		// registrar usuario
 router.get('/user/:userId(\\d+)/edit',		sessionController.loginRequired, userController.ownershipRequired, userController.edit);
 router.put('/user/:userId(\\d+)',			sessionController.loginRequired, userController.ownershipRequired, userController.update);
 router.delete('/user/:userId(\\d+)',		sessionController.loginRequired, userController.ownershipRequired, userController.destroy);
-router.get('/user/:userId(\\d+)/quizes',    quizController.index);
-router.get('/user/:userId(\\d+)/quizes/favoritos', 
-											sessionController.loginRequired, userController.ownershipRequired, quizController.favorites);
+router.get('/user/:userId(\\d+)/quizes',	quizController.index);
+
 // Definición de rutas de /quizes
 router.get('/quizes',						quizController.index);
 router.get('/quizes/:quizId(\\d+)',			quizController.show);
@@ -56,9 +56,22 @@ router.delete('/quizes/:quizId(\\d+)',		sessionController.loginRequired, quizCon
 router.get('/quizes/:quizId(\\d+)/comments/new',	commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments',		commentController.create);
 router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish',
-													sessionController.loginRequired, commentController.ownershipRequired, commentController.publish);
+													sessionController.loginRequired, 
+													commentController.ownershipRequired, 
+													commentController.publish);
 
 // Definición de rutas de estadísticas
 router.get('/quizes/statistics',			statisticController.index);
+
+// Definición de rutas de favoritos
+router.get('/user/:userId(\\d+)/favourites',					sessionController.loginRequired,
+																userController.ownershipRequired,
+																favouritesController.index);			
+router.put('/user/:userId(\\d+)/favourites/:quizId(\\d+)',		sessionController.loginRequired,
+																userController.ownershipRequired,
+																favouritesController.create);
+router.delete('/user/:userId(\\d+)/favourites/:quizId(\\d+)',	sessionController.loginRequired,
+																userController.ownershipRequired,
+																favouritesController.destroy); 
 
 module.exports = router;

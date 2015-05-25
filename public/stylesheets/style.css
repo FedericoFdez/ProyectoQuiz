@@ -26,3 +26,10 @@ nav span             	{ 	margin: 0px 10px 0px 0px;
 table				 	{ 	margin-left: auto;
 					   		margin-right: auto;}
 td					 	{ 	padding: 5px;}
+
+.delete_favourite,
+.add_favourite			{	background:none; border:none; margin:0; padding:0;}
+
+.delete_favourite,
+.add_favourite:hover	{   color: LightSalmon;}
+.add_favourite			{   color: DarkGrey;}	

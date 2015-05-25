@@ -26,6 +26,33 @@
 			<td><a href="/quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></a></td>
 
 			<% if(session.user){ 
+					if(quizes[i].isFavourite) {%>
+						<td>
+							<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=delete">
+								<% if(propios) {%>
+									<input type="hidden" name="origin" value="own" />
+								<% } else { %>
+									<input type="hidden" name="origin" value="all" />
+								<% } %>
+								<button class="delete_favourite" type="submit" onClick="return confirm('¿Eliminar favorito?');">
+									&#9733;
+								</button>
+							</form>
+						</td>
+					<% } else { %>
+						<td>
+							<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=put">
+								<% if(propios) {%>
+									<input type="hidden" name="origin" value="own" />
+								<% } else { %>
+									<input type="hidden" name="origin" value="all" />
+								<% } %>
+								<button class="add_favourite" type="submit">
+									&#9733;
+								</button>
+							</form>
+						</td>
+					<% }
 				if (session.user.isAdmin || session.user.id === quizes[i].UserId) {%>
 					<td><a href="/quizes/<%= quizes[i].id %>/edit"><button>editar</button></a></td>
 					<td>

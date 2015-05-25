@@ -16,7 +16,8 @@ exports.ownershipRequired = function(req,res,next){
 
 // Autoload :userId
 exports.load = function(req,res,next,userId){
-	models.User.find({ where: { id: Number(userId)}})
+	models.User.find({ where: { id: Number(userId)},
+					   include: [{model: models.Quiz }] })
 		.then(function(user){
 			if(user){
 				req.user = user;

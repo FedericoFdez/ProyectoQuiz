@@ -2,6 +2,28 @@
 	<p><%- cloudinary.image(quiz.image, { alt:"Imagen relacionada con la pregunta", class:"quiz_img" })%></p>
 <% } %>
 
+<% if(session.user){ 
+	if(quiz.isFavourite) {%>
+		<td>
+			<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quiz.id%>?_method=delete">
+				<input type="hidden" name="origin" value="one" />
+				<button class="delete_favourite" type="submit" onClick="return confirm('¿Eliminar favorito?');">
+					&#9733;
+				</button>
+			</form>
+		</td>
+	<% } else { %>
+		<td>
+			<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quiz.id%>?_method=put">
+				<input type="hidden" name="origin" value="one" />
+				<button class="add_favourite" type="submit">
+					&#9733;
+				</button>
+			</form>
+		</td>
+	<% }
+} %>
+
 <form method="get" action="/quizes/<%= quiz.id %>/answer">
 	<p>Pregunta: <%= quiz.pregunta %> </p>
 	<input type="text" name="respuesta" value="Respuesta" />
