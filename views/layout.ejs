@@ -3,12 +3,31 @@
   <head>
   	<meta charset="utf-8"><title> Preguntas </title>
     
-    <!--Import materialize.css-->
+    <!-- Import materialize.css -->
     <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/extra.css"  media="screen,projection"/>
 
-    <!--Let browser know website is optimized for mobile-->
+    <!-- Android 5 Chrome Color -->
+    <meta name="theme-color" content="#009688">
+
+    <!-- Let browser know website is optimized for mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
 
   </head>
 
@@ -23,14 +42,23 @@
               <li><a href="/user">Sign up</a></li>
               <li><a href="/login">Sign in</a></li>
             <% } else { %>
-              <li><%= session.user.username%></li>
               <li><a href="/user/<%=session.user.id%>/edit">Settings</a></li>
               <li><a href="/logout">Logout</a></li>
             <% } %>
           </ul>
           <ul id="nav-mobile" class="side-nav fixed">
-            <% if(session.user) { %>
-              <li class="logo black-text"><i class="mdi-action-face-unlock large">    <%= session.user.username %></i></li>
+            <% if (session.user) { %>
+              <li class="logo">
+                <div class="row valign-wrapper">
+                  <div class="col s4 valign-wrapper">
+                    <img src="/media/default-user-img.png" class="responsive-img circle" />
+                  </div>
+                  <div class="col s8 valign-wrapper">
+                    <h5 class="header teal-text"><%= session.user.username %></h5>
+                  </div>
+                </div>
+                <div class="divider"></div>
+              </li>
             <% } %>
             <li><a href="/">Inicio</a></li>
             <li><a href="/quizes">Preguntas</a></li>
@@ -98,8 +126,12 @@
             </ul>
           </div>
         </div>
+        <div class="divider"></div>
+          <p class="hide-on-med-and-down grey-text">Wide layout</p>
+          <p class="hide-on-small-only hide-on-large-only grey-text">Medium layout</p>
+          <p class="hide-on-med-and-up grey-text">Smartphone layout</p>
       </div>
-      <div class="footer-copyright">
+      <div class="footer-copyright valign-wrapper">
         <div class="container">
           <p>CORE-UPM. Junio 2015.</p>
         </div>

@@ -1,5 +1,9 @@
 <% if(quiz.image){%>
-	<p><%- cloudinary.image(quiz.image, { alt:"Imagen relacionada con la pregunta", class:"quiz_img" })%></p>
+	<div class="parallax-container">
+      <div class="parallax">
+      	<%- cloudinary.image(quiz.image, { alt:"Imagen relacionada con la pregunta" })%>
+      </div>
+    </div>
 <% } %>
 
 <% if(session.user){ 
@@ -25,9 +29,23 @@
 } %>
 
 <form method="get" action="/quizes/<%= quiz.id %>/answer">
-	<p>Pregunta: <%= quiz.pregunta %> </p>
-	<input type="text" name="respuesta" value="Respuesta" />
-	<input type="submit" value="Enviar">
+
+	<div class="row">
+		<div class="input-field col s12">
+			<h5 class="header">Pregunta: <%= quiz.pregunta %></h5>
+		</div>
+
+		<div class="input-field col s12">
+			<input type="text" id="resp" name="respuesta" value=""/>
+			<label for="resp">Respuesta</label>
+		</div>
+	</div>
+	
+	<div class="row">
+		<button class="btn waves-effect waves-light" type="submit">Enviar<i class="mdi-content-send right"></i>
+		</button>
+	</div>
+
 </form>
 
 <p><a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>

@@ -1,34 +1,24 @@
-<nav>
-	<div class="nav-wrapper">
-
-		<form method="get" action="
-				<% if(propios){ %>
-					/user/<%=session.user.id%>/quizes
-				<% } else { %>
-					/quizes
-				<% } %>
-		">
-		    <div class="input-field">
-		      <input id="search" type="text" name="search" required>
-		      <label for="search"><i class="mdi-action-search"></i></label>
-		      <i class="mdi-navigation-close"></i>
-		    </div>
-		</form>
-	</div>
+<nav id="search" class="teal lighten-2">
+    <div class="nav-wrapper z-depth-2">
+      <form method="get" action="
+		<% if(propios){ %>
+			/user/<%=session.user.id%>/quizes
+		<% } else { %>
+			/quizes
+		<% } %>
+">
+        <div class="input-field">
+          <input name="search" type="search" <% if(busqueda){ %> value="<%=busqueda%>" <%}%>>
+          <label for="search"><i class="mdi-action-search"></i></label>
+          <i class="mdi-navigation-close"></i>
+        </div>
+      </form>
+    </div>
 </nav>
-
-<%
-	if (busqueda){
-%>
-	<h3>Preguntas con "<%= busqueda %>"</h3>
-<%
-	}
-%>
 
 <% if(session.user){ %>
 	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-	    <a class="btn-floating btn-large teal accent-4
-	    	<% if(!session.user){ %>disabled<%}%>" href="/quizes/new">
+	    <a class="btn-floating btn-large amber accent-4" href="/quizes/new">
 	      <i class="large mdi-editor-mode-edit"></i>
 	    </a>
 	    <ul>
@@ -38,52 +28,68 @@
 
 	var i;
 	for (i=0; i<quizes.length; i++){ %>
+		<% if(i%3==0) { %>
+		<div class="row">
+		<% } %>
+			<div class="col s12 m12 l4">
+	          <div class="card teal">
+	            <div class="card-content white-text">
+	              <span class="card-title"><%= quizes[i].pregunta %></span>
+	            </div>
+	            <div class="card-action valign-wrapper">
+	              <a href='/quizes/<%= quizes[i].id %>'>Resolver quiz</a>
 
-		<div class="col s12 m12 l4">
-          <div class="card teal">
-            <div class="card-content white-text">
-              <span class="card-title"><%= quizes[i].pregunta %></span>
-            </div>
-            <div class="card-action">
-              <a href='/quizes/<%= quizes[i].id %>'>Contestar pregunta</a>
-              <i class="mdi-navigation-more-vert right activator"></i>
-            </div>
-            <div class="card-reveal">
-              <% if(session.user){
-              	if (session.user.isAdmin || session.user.id === quizes[i].UserId) {%>
-              		<a href="/quizes/<%= quizes[i].id %>/edit">Editar</a>
-              		<form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
-							<a  onClick="form.submit();">
-								borrar
-							</a>
-					</form>
-              	<% }
-              	if(quizes[i].isFavourite) {%>
-					<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=delete">
-						<% if(propios) {%>
-							<input type="hidden" name="origin" value="own" />
-						<% } else { %>
-							<input type="hidden" name="origin" value="all" />
-						<% } %>
-						<button class="delete_favourite" type="submit" onClick="return confirm('¿Eliminar favorito?');">
-							&#9733;
-						</button>
-					</form>
-				<% } else { %>
-					<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=put">
-						<% if(propios) {%>
-							<input type="hidden" name="origin" value="own" />
-						<% } else { %>
-							<input type="hidden" name="origin" value="all" />
-						<% } %>
-						<button class="add_favourite" type="submit">
-							&#9733;
-						</button>
-					</form>
-				<% }
+	              <% if(session.user){%>
+	              	<span class="activator right link-like"><i class="mdi-navigation-more-vert small waves-effect"></i></span>
+	            </div>
 
-              } %>
-            </div>
-          </div>
+	            <div class="card-reveal">
+	            	<div class="row">
+	            		<span class="card-title teal-text text-darken-4">Opciones<i class="mdi-navigation-close right teal-text"></i></span>
+	            	</div>
+
+	            	<div class="valign-wrapper center">
+
+	              	<% if (session.user.isAdmin || session.user.id === quizes[i].UserId) {%>
+	              		<form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+	              			<a href="/quizes/<%= quizes[i].id %>/edit" class="link-like">Editar</a>
+							<button class="link-like" type="submit" onClick="return confirm('Borrar: <%=quizes[i].pregunta%>?');">
+								Borrar
+							</button>
+						</form>
+	              	<% }
+	              	if(quizes[i].isFavourite) {%>
+						<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=delete">
+							<% if(propios) {%>
+								<input type="hidden" name="origin" value="own" />
+							<% } else { %>
+								<input type="hidden" name="origin" value="all" />
+							<% } %>
+							<button class="link-like" type="submit" onClick="return confirm('¿Eliminar favorito?');">
+								<i class="mdi-action-favorite small"></i>
+							</button>
+						</form>
+					<% } else { %>
+						<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=put">
+							<% if(propios) {%>
+								<input type="hidden" name="origin" value="own" />
+							<% } else { %>
+								<input type="hidden" name="origin" value="all" />
+							<% } %>
+							<button class="link-like" type="submit">
+								<i class="mdi-action-favorite-outline small"></i>
+							</button>
+						</form>
+					<% }
+
+	              } %>
+
+	              </div>
+	            </div>
+	          </div>
+			</div>
+
+		<% if(i%3==2) { %>
 		</div>
+		<% } %>
 	<% } %>
