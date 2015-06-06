@@ -1,6 +1,41 @@
 <h2>Estadísticas</h2>
 
-<div id="pieChart"></div>
+<div class="row">
+	<div class="col s12 hide-on-small-only" id="pieChart"></div>
+</div>
+
+<div class="row">
+	<table class="col s12 m8 offset-m2 l8 offset-l2 striped">
+		<thead>
+			<tr>
+				<th>Parámetro</th>
+				<th>Valor</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Número de preguntas</td>
+				<td><%= numPreguntas %></td>
+			</tr>
+			<tr>
+				<td>Número de comentarios totales</td>
+				<td><%= numComentarios %></td>
+			</tr>
+			<tr>
+				<td>Número medio de comentarios por pregunta</td>
+				<td><%= comentariosPorPregunta %></td>
+			</tr>
+			<tr>
+				<td>Número de preguntas con comentarios</td>
+				<td><%= preguntasConComentarios %></td>
+			</tr>
+			<tr>
+				<td>Número de preguntas sin comentarios</td>
+				<td><%= preguntasSinComentarios %></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
 <script src="/javascripts/d3pie.min.js"></script>
@@ -22,19 +57,19 @@ var pie = new d3pie("pieChart", {
 	},
 	"size": {
 		"canvasHeight": 300,
-		"canvasWidth": 490,
+		"canvasWidth": 400,
 		"pieInnerRadius": "40%",
 		"pieOuterRadius": "88%"
 	},
 	"data": {
 		"content": [
 			{
-				"label": "Con comentarios",
+				"label": "Con coment.",
 				"value": <%= preguntasConComentarios %>,
 				"color": "#387e6a"
 			},
 			{
-				"label": "Sin comentarios",
+				"label": "Sin coment.",
 				"value": <%= preguntasSinComentarios %>,
 				"color": "#386a7e"
 			}
@@ -77,27 +112,3 @@ var pie = new d3pie("pieChart", {
 	}
 });
 </script>
-<table>
-
-	<tr>
-		<td>Número de preguntas</td>
-		<td><%= numPreguntas %></td>
-	</tr>
-	<tr>
-		<td>Número de comentarios totales</td>
-		<td><%= numComentarios %></td>
-	</tr>
-	<tr>
-		<td>Número medio de comentarios por pregunta</td>
-		<td><%= comentariosPorPregunta %></td>
-	</tr>
-	<tr>
-		<td>Número de preguntas con comentarios</td>
-		<td><%= preguntasConComentarios %></td>
-	</tr>
-	<tr>
-		<td>Número de preguntas sin comentarios</td>
-		<td><%= preguntasSinComentarios %></td>
-	</tr>
-
-</table>
