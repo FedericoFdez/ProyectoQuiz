@@ -6,39 +6,38 @@
     </div>
 <% } %>
 
-<% if(session.user){ 
-	if(quiz.isFavourite) {%>
-		<td>
-			<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quiz.id%>?_method=delete">
-				<input type="hidden" name="origin" value="one" />
-				<button class="delete_favourite" type="submit" onClick="return confirm('¿Eliminar favorito?');">
-					&#9733;
-				</button>
-			</form>
-		</td>
+<% if(session.user){ %>
+	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+	<% if(quiz.isFavourite) {%>
+		<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quiz.id%>?_method=delete">
+			<input type="hidden" name="origin" value="one" />
+			<button class="btn-floating btn-large amber accent-4" type="submit" onClick="return confirm('¿Eliminar favorito?');">
+				<i class="large mdi-action-favorite"></i>
+			</button>
+		</form>
 	<% } else { %>
-		<td>
-			<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quiz.id%>?_method=put">
-				<input type="hidden" name="origin" value="one" />
-				<button class="add_favourite" type="submit">
-					&#9733;
-				</button>
-			</form>
-		</td>
-	<% }
-} %>
+		<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quiz.id%>?_method=put">
+			<input type="hidden" name="origin" value="one" />
+			<button class="btn-floating btn-large amber accent-4" type="submit">
+				<i class="large mdi-action-favorite-outline"></i>
+			</button>
+		</form>
+	<% } %>
+	</div>
+<% } %>
 
 <form method="get" action="/quizes/<%= quiz.id %>/answer">
 
 	<div class="row">
 		<div class="input-field col s12">
-			<h5 class="header">Pregunta: <%= quiz.pregunta %></h5>
+			<h5 class="header"><span class="grey-text">Pregunta... </span><%= quiz.pregunta %></h5>
 		</div>
 
-		<div class="input-field col s12">
+		<div class="input-field col s12 l6 offset-l3">
 			<input type="text" id="resp" name="respuesta" value=""/>
 			<label for="resp">Respuesta</label>
 		</div>
+
 	</div>
 	
 	<div class="row">
@@ -48,14 +47,33 @@
 
 </form>
 
-<p><a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>
+<div class="divider"></div>
 
-<p><strong>Comentarios:</strong></p>
-<% for(index in quiz.Comments) {%>
-	<% if(quiz.Comments[index].publicado){%>
-		<p>- <%=quiz.Comments[index].texto%></p>
-	<%} else if(session.user && (session.user.isAdmin || (session.user && quiz.UserId === session.user.id))) {%>
-			<p>- <%=quiz.Comments[index].texto%>
-			<a href="/quizes/<%= quiz.id %>/comments/<%=quiz.Comments[index].id%>/publish"><button>Publicar</button></a></p>
+<div class="section">
+
+	<h5 class="grey-text darken-2"><a class="left" href="/quizes/<%= quiz.id %>/comments/new" alt="Nuevo comentario"><i class="mdi-content-add-circle small teal-text waves-effect waves-light"></i></a>Comentarios<a class="right" href="/quizes/<%= quiz.id %>/comments/new" alt="Nuevo comentario"><i class="mdi-content-add-circle small teal-text waves-effect waves-light"></i></a></h5>
+
+	<% for(index in quiz.Comments) {%>
+		<% if(quiz.Comments[index].publicado){%>
+		<div class="col s12 m6 l4">
+			<div class="card">
+				<div class="card-content">
+					<p><%=quiz.Comments[index].texto%></p>
+				</div>
+			</div>
+		</div>
+		<%} else if(session.user && (session.user.isAdmin || (session.user && quiz.UserId === session.user.id))) {%>
+		<div class="col s12 m6 l4">
+			<div class="card">
+				<div class="card-content">
+					<p class="grey-text"><%=quiz.Comments[index].texto%></p>
+				</div>
+				<div class="card-action">
+					<a href="/quizes/<%= quiz.id %>/comments/<%=quiz.Comments[index].id%>/publish">Publicar</a>
+				</div>
+			</div>
+		</div>
+		<% } %>
 	<% } %>
-<% } %>
+
+</div>

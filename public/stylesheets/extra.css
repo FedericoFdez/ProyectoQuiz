@@ -40,7 +40,13 @@ header, footer, main {
   height: 200px;
 }
 
-.card-action{
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
+.centrado {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-top: 2.5em !important;
+}
+
+.menu-opt {
+  float:right !important;
+  margin-right: auto !important;
 }

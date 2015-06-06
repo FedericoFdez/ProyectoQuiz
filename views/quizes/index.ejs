@@ -24,34 +24,32 @@
 	    <ul>
 	</div>
 
-<% }
+<% } %>
 
-	var i;
+<div class="row">
+
+	<% var i;
 	for (i=0; i<quizes.length; i++){ %>
-		<% if(i%3==0) { %>
-		<div class="row">
-		<% } %>
-			<div class="col s12 m12 l4">
+
+			<div class="col s12 m6 l4">
 	          <div class="card teal">
-	            <div class="card-content white-text">
+	            <div class="card-content">
 	              <span class="card-title"><%= quizes[i].pregunta %></span>
 	            </div>
 	            <div class="card-action valign-wrapper">
 	              <a href='/quizes/<%= quizes[i].id %>'>Resolver quiz</a>
 
 	              <% if(session.user){%>
-	              	<span class="activator right link-like"><i class="mdi-navigation-more-vert small waves-effect"></i></span>
+	              	<span class="activator link-like menu-opt"><i class="mdi-navigation-more-vert right small waves-effect"></i></span>
 	            </div>
 
 	            <div class="card-reveal">
-	            	<div class="row">
-	            		<span class="card-title teal-text text-darken-4">Opciones<i class="mdi-navigation-close right teal-text"></i></span>
-	            	</div>
+	            	<span class="card-title teal-text text-darken-4">Opciones<i class="mdi-navigation-close right teal-text"></i></span>
 
-	            	<div class="valign-wrapper center">
+	            	<div class="valign-wrapper">
 
 	              	<% if (session.user.isAdmin || session.user.id === quizes[i].UserId) {%>
-	              		<form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+	              		<form class="centrado" method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
 	              			<a href="/quizes/<%= quizes[i].id %>/edit" class="link-like">Editar</a>
 							<button class="link-like" type="submit" onClick="return confirm('Borrar: <%=quizes[i].pregunta%>?');">
 								Borrar
@@ -59,7 +57,7 @@
 						</form>
 	              	<% }
 	              	if(quizes[i].isFavourite) {%>
-						<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=delete">
+						<form class="centrado" method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=delete">
 							<% if(propios) {%>
 								<input type="hidden" name="origin" value="own" />
 							<% } else { %>
@@ -70,7 +68,7 @@
 							</button>
 						</form>
 					<% } else { %>
-						<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=put">
+						<form class="centrado" method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=put">
 							<% if(propios) {%>
 								<input type="hidden" name="origin" value="own" />
 							<% } else { %>
@@ -80,16 +78,16 @@
 								<i class="mdi-action-favorite-outline small"></i>
 							</button>
 						</form>
-					<% }
+					<% } %>
 
-	              } %>
+					</div>
 
-	              </div>
+	              <% } %>
+
 	            </div>
 	          </div>
 			</div>
 
-		<% if(i%3==2) { %>
-		</div>
-		<% } %>
 	<% } %>
+
+</div>
