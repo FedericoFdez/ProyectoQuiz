@@ -5,7 +5,7 @@ module.exports = {
   },
 
   down: function (migration, DataTypes, done) {
-    migration.removeColumn('Users','image');
+    migration.removeColumn('Users','face');
     done();
   }
 };
