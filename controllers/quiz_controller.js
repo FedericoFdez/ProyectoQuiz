@@ -106,7 +106,7 @@ exports.index = function(req, res) {
 // GET /quizes/new
 exports.new = function(req,res) {
 	var quiz = models.Quiz.build( //crea objeto quiz
-		{pregunta: "", respuesta: ""}
+		{pregunta: " ", respuesta: " "}
 		);
 	res.render('quizes/new',{quiz:quiz, errors:[]});
 };
@@ -116,41 +116,34 @@ exports.create = function(req,res) {
 	req.body.quiz.UserId = req.session.user.id;
 	var quiz = models.Quiz.build( req.body.quiz );
 
-	if (req.files.image) {
-		cloudinary.uploader.upload(
-			req.files.image.path, function(result) { 
-				req.body.quiz.image = result.public_id;
+	console.log("Image es : "+req.files.image);
+	console.log("Pregunta es : "+quiz.pregunta);
+	console.log("Respuesta es: "+quiz.respuesta);
 
-				quiz.validate()
-					.then(
-						function(err){
-							if(err) {
-								res.render('quizes/new', {quiz: quiz, errors: err.errors});
-							} else {
-								quiz // guarda en DB los campos pregunta y respuesta de quiz
-								.save({fields: ["pregunta", "respuesta", "UserId", "image"]})
-								.then(function(){ res.redirect('/quizes')});
-									// Redirección HTTP (URL relativo) a la lista de preguntas
-							}
-						}
-					);
-			}    
-		);
-	}else{
-		quiz.validate()
-		.then(
-			function(err){
-				if(err) {
-					res.render('quizes/new', {quiz: quiz, errors: err.errors});
+	quiz.validate()
+	.then(
+		function(err){
+			if(err) {
+				res.render('quizes/new', {quiz: quiz, errors: err.errors});;
+			} else {
+				if(req.files.image){
+					cloudinary.uploader.upload(
+						req.files.image.path, function(result){
+							quiz.image = result.public_id;
+							quiz // guarda en DB los campos pregunta y respuesta de quiz
+							.save({fields: ["pregunta", "respuesta", "UserId", "image"]})
+							.then(function(){ res.redirect('/quizes')});
+								// Redirección HTTP (URL relativo) a la lista de preguntas
+					});
 				} else {
+					quiz.image = "";
 					quiz // guarda en DB los campos pregunta y respuesta de quiz
 					.save({fields: ["pregunta", "respuesta", "UserId", "image"]})
 					.then(function(){ res.redirect('/quizes')});
 						// Redirección HTTP (URL relativo) a la lista de preguntas
 				}
 			}
-		);
-	}
+		}).catch(function(err){next(err)});
 };
 
 // GET /quizes/:id
