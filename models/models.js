@@ -73,12 +73,20 @@ User.count().then(function(count){
 			Quiz.count().then(function(count){
 				if(count === 0) {		// la tabla se inicializa solo si está vacía
 					Quiz.bulkCreate(	// estos quizes pertenecen al usuario pepe (2)
-						[	{pregunta: 'Capital de Italia',		respuesta: 'Roma',		UserId:2, image: 'cv4ztientykbiirnsorp'},
-							{pregunta: 'Capital de Alemania',	respuesta: 'Berlín',	UserId:2, image: 'Berlin_efm6g'},
-							{pregunta: 'Capital de España',		respuesta: 'Madrid',	UserId:2, image: 'gq6zkjseymfrjpe14vno'}
+						[	{pregunta: '¿Cuál es la capital de Italia?',	respuesta: 'Roma',		UserId:2, image: 'cv4ztientykbiirnsorp'},
+							{pregunta: '¿Cuál es la capital de Alemania?',	respuesta: 'Berlín',	UserId:2, image: 'Berlin_efm6g'},
+							{pregunta: '¿Cuál es la capital de España?',	respuesta: 'Madrid',	UserId:2, image: 'gq6zkjseymfrjpe14vno'}
 						]
-					).then(function(){console.log('Base de datos (tabla quiz) inicializada')});
-				};
+					).then(function(){
+						Comment.bulkCreate(
+							[	{ texto: 'Este comentario ya está publicado' , publicado: true, QuizId: 1},
+								{ texto: 'Y este' , publicado: true, QuizId: 1},
+								{ texto: 'Y este también' , publicado: true, QuizId: 1},
+								{ texto: 'Este comentario todavía no está publicado' , publicado: false, QuizId: 1}
+							]
+						).then(function(){console.log('Base de datos (tabla quiz) inicializada')});
+					});
+				}
 			});
 		});
 	};
