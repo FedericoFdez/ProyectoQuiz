@@ -51,7 +51,15 @@
               <li class="logo">
                 <div class="row valign-wrapper">
                   <div class="col s4 valign-wrapper">
-                    <img src="/images/default-user-img.png" class="responsive-img circle" />
+                    <% if (session.user.face) { %>
+                      <%- cloudinary.image(session.user.face, {
+                            width: 512, height: 512, 
+                            crop: 'crop', gravity: 'face',
+                            alt: "Imagen de perfil", class:"responsive-img circle"
+                          }) %>
+                    <% } else { %>
+                      <img src="/images/default-user-img.png" class="responsive-img circle" />
+                    <% } %>
                   </div>
                   <div class="col s8 valign-wrapper">
                     <h5 class="header teal-text">

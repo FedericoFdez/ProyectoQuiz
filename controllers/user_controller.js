@@ -1,5 +1,7 @@
 var models = require('../models/models.js');
 
+var cloudinary = require('cloudinary');
+
 // MW que permite acciones solamente si el usuario objeto
 // corresponde con el usuario logeado o si es cuenta admin
 exports.ownershipRequired = function(req,res,next){
@@ -76,13 +78,30 @@ exports.create = function(req,res){
 		if(err){
 			res.render('users/new', {user: user, errors: err.errors});
 		} else {
-			user // save: guarda en DB campos username y password
-			.save( {fields: ["username", "password"]})
-			.then( function(){
-				// crea la sesión con el usuario ya autenticado y redirige a /
-				req.session.user = {id:user.id, username: user.username};
-				res.redirect('/');
-			});
+			if(req.files.image){
+				cloudinary.uploader.upload(
+					req.files.image.path, function(result){
+						user.face = result.public_id;
+						user // save: guarda en DB campos username y password y face
+						.save( {fields: ["username", "password", "face"]})
+						.then( function(){
+							// crea la sesión con el usuario ya autenticado y redirige a /
+							req.session.user = {id:user.id, username: user.username, 
+								lastSeen: new Date().getTime(), face: user.face};
+							res.redirect('/');
+						});
+					});
+			} else {
+				user.face = "";
+				user // save: guarda en DB campos username y face
+				.save( {fields: ["username", "password", "face"]})
+				.then( function(){
+					// crea la sesión con el usuario ya autenticado y redirige a /
+					req.session.user = {id:user.id, username: user.username, 
+								lastSeen: new Date().getTime()};
+					res.redirect('/');
+				});
+			}
 		}
 	}).catch(function(error){next(error)});
 };
@@ -92,6 +111,7 @@ exports.update = function(req,res,next){
 	var userController = require('./user_controller');
 	userController.autenticar(req.user.username, req.body.oldPassword, function(error, user) {
 		if (error) { // si hay error retornamos mensajes de error de sesión
+			console.log("Error en autenticación");
 			req.session.errors = [{"message": 'Se ha producido un error: '+error}];
 			res.render("users/edit", { user: req.user, errors:req.session.errors });
 			return;
@@ -104,11 +124,30 @@ exports.update = function(req,res,next){
 		.validate()
 		.then(function(err){
 			if(err){
+				console.log("error en validación");
 				res.render('users/edit', { user: req.user, errors: err.errors});
 			} else {
-				req.user
-				.save( {fields: ["username", "password"]}) // guarda username y password en DB
-				.then( function(){ res.redirect('/');}); // redirección HTTP a /
+				if(req.files.image){
+					cloudinary.uploader.upload(
+						req.files.image.path, function(result){
+							req.user.face = result.public_id;
+							req.session.user.face = result.public_id;
+							req.user // save: guarda en DB campos username y password y face
+							.save( {fields: ["username", "password", "face"]})
+							.then( function(){
+								// crea la sesión con el usuario ya autenticado y redirige a /
+								res.redirect('/');
+							});
+						});
+				} else {
+					req.user.face = "";
+					req.user // save: guarda en DB campos username y face
+					.save( {fields: ["username", "password", "face"]})
+					.then( function(){
+						// crea la sesión con el usuario ya autenticado y redirige a /
+						res.redirect('/');
+					});
+				}
 			}
 		}).catch(function(error){next(error)});
 		});

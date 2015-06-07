@@ -1,7 +1,7 @@
-<h5 class="header">Crear usuario</h5>
+<h5 class="header">Editar usuario</h5>
 <div class="container">
 
-	<form method="post" action="/user/<%= user.id %>?_method=put">
+	<form method="post" action="/user/<%= user.id %>?_method=put" enctype="multipart/form-data">
 		<div class="row">
 			<div class="input-field col s12">
 				<i class="mdi-action-lock prefix"></i>

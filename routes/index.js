@@ -31,9 +31,9 @@ router.get('/logout',						sessionController.destroy);	// destruir sesión
 
 // Definición de rutas de cuenta
 router.get('/user',							userController.new);		// formulario sign in
-router.post('/user',						userController.create);		// registrar usuario
+router.post('/user',						multer({ dest: './public/media/'}), userController.create);		// registrar usuario
 router.get('/user/:userId(\\d+)/edit',		sessionController.loginRequired, userController.ownershipRequired, userController.edit);
-router.put('/user/:userId(\\d+)',			sessionController.loginRequired, userController.ownershipRequired, userController.update);
+router.put('/user/:userId(\\d+)',			sessionController.loginRequired, userController.ownershipRequired, multer({ dest: './public/media/'}), userController.update);
 router.delete('/user/:userId(\\d+)',		sessionController.loginRequired, userController.ownershipRequired, userController.destroy);
 router.get('/user/:userId(\\d+)/quizes',	quizController.index);
 
