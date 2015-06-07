@@ -32,6 +32,10 @@ header, footer, main {
 	background-color: transparent;
 }
 
+.tarjetas{
+  margin-bottom: 0 !important;
+}
+
 #search {
   margin-bottom: 30px;
 }
