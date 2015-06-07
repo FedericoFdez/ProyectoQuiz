@@ -83,22 +83,22 @@ exports.create = function(req,res){
 					req.files.image.path, function(result){
 						user.face = result.public_id;
 						user // save: guarda en DB campos username y password y face
-						.save( {fields: ["username", "password", "face"]})
+						.save( {fields: ["username", "password", "points", "face"]})
 						.then( function(){
 							// crea la sesión con el usuario ya autenticado y redirige a /
 							req.session.user = {id:user.id, username: user.username, 
-								lastSeen: new Date().getTime(), face: user.face};
+								lastSeen: new Date().getTime(), face: user.face, points: user.points};
 							res.redirect('/');
 						});
 					});
 			} else {
 				user.face = "";
 				user // save: guarda en DB campos username y face
-				.save( {fields: ["username", "password", "face"]})
+				.save( {fields: ["username", "password", "points", "face"]})
 				.then( function(){
 					// crea la sesión con el usuario ya autenticado y redirige a /
 					req.session.user = {id:user.id, username: user.username, 
-								lastSeen: new Date().getTime()};
+								lastSeen: new Date().getTime(), points: user.points};
 					res.redirect('/');
 				});
 			}

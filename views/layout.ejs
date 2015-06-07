@@ -39,11 +39,11 @@
           <a class="brand-logo center">Quiz</a>
           <ul class="right hide-on-med-and-down">
             <% if(!session.user){ %>
-              <li><a href="/user">Sign up</a></li>
-              <li><a href="/login">Login</a></li>
+              <li><a class="waves-effect" href="/user">Sign up</a></li>
+              <li><a class="waves-effect" href="/login">Login</a></li>
             <% } else { %>
-              <li><a href="/user/<%=session.user.id%>/edit">Settings</a></li>
-              <li><a href="/logout">Logout</a></li>
+              <li><a class="waves-effect" href="/user/<%=session.user.id%>/edit">Settings</a></li>
+              <li><a class="waves-effect" href="/logout">Logout</a></li>
             <% } %>
           </ul>
           <ul id="nav-mobile" class="side-nav fixed">
@@ -72,21 +72,21 @@
                 <div class="divider"></div>
               </li>
             <% } %>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/quizes">Preguntas</a></li>
+            <li><a class="waves-effect waves-teal" href="/">Inicio</a></li>
+            <li><a class="waves-effect waves-teal" href="/quizes">Preguntas</a></li>
             <% if(session.user) { %>
-              <li><a href="/user/<%= session.user.id %>/quizes">Mis Preguntas</a></li>
-              <li><a href="/user/<%= session.user.id %>/favourites">Favoritos</a></li>
+              <li><a class="waves-effect waves-teal" href="/user/<%= session.user.id %>/quizes">Mis Preguntas</a></li>
+              <li><a class="waves-effect waves-teal" href="/user/<%= session.user.id %>/favourites">Favoritos</a></li>
             <% } %>
-            <li><a href="/quizes/statistics">Estadísticas</a></li>
-            <li><a href="/author">Créditos</a></li>
+            <li><a class="waves-effect waves-teal" href="/quizes/statistics">Estadísticas</a></li>
+            <li><a class="waves-effect waves-teal" href="/author">Créditos</a></li>
 
             <% if(!session.user){ %>
-              <li class="hide-on-large-only"><a href="/user">Sign up</a></li>
-              <li class="hide-on-large-only"><a href="/login">Login</a></li>
+              <li class="hide-on-large-only"><a class="waves-effect waves-teal" href="/user">Sign up</a></li>
+              <li class="hide-on-large-only"><a class="waves-effect waves-teal" href="/login">Login</a></li>
             <% } else {%>
-              <li class="hide-on-large-only"><a href="/user/<%=session.user.id%>/edit"><i class="mdi-action-settings left"></i>Settings</a></li>
-              <li class="hide-on-large-only"><a href="/logout"><i class="mdi-action-exit-to-app left"></i>Logout</a></li>
+              <li class="hide-on-large-only"><a class="waves-effect waves-teal" href="/user/<%=session.user.id%>/edit"><i class="mdi-action-settings left"></i>Settings</a></li>
+              <li class="hide-on-large-only"><a class="waves-effect waves-teal" href="/logout"><i class="mdi-action-exit-to-app left"></i>Logout</a></li>
             <% } %>
           </ul>
           <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>

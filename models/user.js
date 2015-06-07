@@ -46,7 +46,11 @@ module.exports = function(sequelize, DataTypes){
 			},
 			points:{
 				type: DataTypes.INTEGER,
-				defaultValue:0
+				defaultValue:0,
+				allowNull: false
+			},
+			face:{
+				type: DataTypes.STRING
 			}
 		},
 		{
