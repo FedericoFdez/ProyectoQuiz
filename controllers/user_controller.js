@@ -117,8 +117,10 @@ exports.update = function(req,res,next){
 			return;
 		}
 		// Actualizar campos
-		req.user.username = req.body.user.username;
-		req.user.password = req.body.user.password;
+		if(req.body.user.username!==req.user.username)
+			req.user.username = req.body.user.username;
+		if(req.body.user.password!=="")
+			req.user.password = req.body.user.password;
 
 		req.user
 		.validate()
@@ -132,6 +134,7 @@ exports.update = function(req,res,next){
 						req.files.image.path, function(result){
 							req.user.face = result.public_id;
 							req.session.user.face = result.public_id;
+							req.session.user.username = req.user.username;
 							req.user // save: guarda en DB campos username y password y face
 							.save( {fields: ["username", "password", "face"]})
 							.then( function(){
@@ -140,9 +143,9 @@ exports.update = function(req,res,next){
 							});
 						});
 				} else {
-					req.user.face = "";
-					req.user // save: guarda en DB campos username y face
-					.save( {fields: ["username", "password", "face"]})
+					req.session.user.username = req.user.username;
+					req.user // save: guarda en DB campos username
+					.save( {fields: ["username", "password"]})
 					.then( function(){
 						// crea la sesión con el usuario ya autenticado y redirige a /
 						res.redirect('/');
@@ -155,9 +158,18 @@ exports.update = function(req,res,next){
 
 // DELETE /user/:id
 exports.destroy = function(req,res){
-	req.user.destroy().then(function(){
-		//borra la ssión y redirige a /
-		delete req.session.user;
-		res.redirect('/');
-	}).catch(function(error){next(error);});
+	var userController = require('./user_controller');
+	userController.autenticar(req.user.username, req.body.oldPassword, function(error, user) {
+		if (error) { // si hay error retornamos mensajes de error de sesión
+			console.log("Error en autenticación");
+			req.session.errors = [{"message": 'Se ha producido un error: '+error}];
+			res.render("users/edit", { user: req.user, errors:req.session.errors });
+			return;
+		}
+		req.user.destroy().then(function(){
+			//borra la ssión y redirige a /
+			delete req.session.user;
+			res.redirect('/');
+		}).catch(function(error){next(error);});
+	});
 };
