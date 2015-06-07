@@ -60,17 +60,22 @@ exports.User = User;
 User.count().then(function(count){
 	if(count === 0){ // la tabla se inicializa solo si está vacía
 		User.bulkCreate(
-			[	{username: 'admin', password: '1234', isAdmin: true},
-				{username: 'pepe',  password: '5678'} // is Admin por defecto: 'false'
+			[	{username: 'admin', 		password: '1234', isAdmin: true},
+				{username: 'pepe',  		password: '5678', 			points: 0}, // is Admin por defecto: 'false',
+				{username: 'captain', 		password: 'captain', 		face: 'aldnmc38rm8t6lilr5yl', 		points: 17},
+				{username: 'iron_man', 		password: 'iron_man', 		face: '124478-123225_rb2yhk', 		points: 10},
+				{username: 'thor', 			password: 'thor', 			face: 'thor-dark-world-640_gmiytj', points: -5},
+				{username: 'black_widow', 	password: 'black_widow', 	face: '12_s6kycv', 					points: 2},
+				{username: 'cookie_monster',password: 'cookie_monster', face: 'zvxniaye9zmcllxnyp3m', 		points: -20},
 			]
 		).then(function(){
 			console.log('Base de datos (tabla user) inicializada');
 			Quiz.count().then(function(count){
 				if(count === 0) {		// la tabla se inicializa solo si está vacía
 					Quiz.bulkCreate(	// estos quizes pertenecen al usuario pepe (2)
-						[	{pregunta: 'Capital de Italia',		respuesta: 'Roma',		UserId:2},
-							{pregunta: 'Capital de Portugal',	respuesta: 'Lisboa',	UserId:2},
-							{pregunta: 'Capital de Suecia',		respuesta: 'Estocolmo',	UserId:2}
+						[	{pregunta: 'Capital de Italia',		respuesta: 'Roma',		UserId:2, image: 'cv4ztientykbiirnsorp'},
+							{pregunta: 'Capital de Alemania',	respuesta: 'Berlín',	UserId:2, image: 'Berlin_efm6g'},
+							{pregunta: 'Capital de España',		respuesta: 'Madrid',	UserId:2, image: 'gq6zkjseymfrjpe14vno'}
 						]
 					).then(function(){console.log('Base de datos (tabla quiz) inicializada')});
 				};
