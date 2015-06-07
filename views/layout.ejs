@@ -95,33 +95,31 @@
     </header>
 
     <main>
-      <div class="container">
-          <section>
-          <div class="row center">
-            <% if (errors.length) { %>
-              <div class="col s12 m8 offset-m2 l6 offset-l3">
-                <div class="card-panel orange accent-3">
-                    <div class="row valign-wrapper">
-                      <div class="col s2">
-                        <i class="small mdi-alert-error left"></i>
-                      </div>
-                      <div class="col s10">
-                        <span class="left">Corregir errores:<br/>
-                        <% for (var i in errors) { %>
-                          <br/><%= errors[i].message %>
-                        <% } %>
-                        </span>
-                      </div>
+      <section>
+        <div class="container row center">
+          <% if (errors.length) { %>
+            <div class="col s12 m8 offset-m2 l6 offset-l3">
+              <div class="card-panel orange accent-3">
+                  <div class="row valign-wrapper">
+                    <div class="col s2">
+                      <i class="small mdi-alert-error left"></i>
                     </div>
-                </div>
+                    <div class="col s10">
+                      <span class="left">Corregir errores:<br/>
+                      <% for (var i in errors) { %>
+                        <br/><%= errors[i].message %>
+                      <% } %>
+                      </span>
+                    </div>
+                  </div>
               </div>
-            <% } %>    
-          </div>
-          <div class="row center">
-            <%- body %>
-          </div>
-          </section>
-      </div>
+            </div>
+          <% } %>    
+        </div>
+        <div class="row center">
+          <%- body %>
+        </div>
+      </section>
     </main>
 
 		<footer class="page-footer teal lighten-4">

@@ -1,26 +1,28 @@
-<h5 class="header">Editar usuario</h5>
 <div class="container">
+	<h5 class="header">Editar usuario</h5>
+	<div class="container">
 
-	<form method="post" action="/user/<%= user.id %>?_method=put" enctype="multipart/form-data">
-		<div class="row">
-			<div class="input-field col s12">
-				<i class="mdi-action-lock prefix"></i>
-				<input class="validate" type="password" id="oldPassword" name="oldPassword"/>
-				<label for="oldPassword">Old password</label>
+		<form method="post" action="/user/<%= user.id %>?_method=put" enctype="multipart/form-data">
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-lock prefix"></i>
+					<input class="validate" type="password" id="oldPassword" name="oldPassword"/>
+					<label for="oldPassword">Old password</label>
+				</div>
 			</div>
-		</div>
-		<div class="divider"></div>
-		<div class="section">
-			<% include _form.ejs %>
-		</div>
-	</form>
+			<div class="divider"></div>
+			<div class="section">
+				<% include _form.ejs %>
+			</div>
+		</form>
 
-	<form method="post" action="/user/<%= user.id %>?_method=delete">
-		<div class="input-field col s12">
-			<button class="btn waves-effect waves-light red" type="submit" onClick="return confirm('Borrar cuenta: <%= user.username %>');">
-			Eliminar cuenta
-			</button>
-		</div>
-	</form>
+		<form method="post" action="/user/<%= user.id %>?_method=delete">
+			<div class="input-field col s12">
+				<button class="btn waves-effect waves-light red" type="submit" onClick="return confirm('Borrar cuenta: <%= user.username %>');">
+				Eliminar cuenta
+				</button>
+			</div>
+		</form>
 
+	</div>
 </div>

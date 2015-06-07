@@ -1,114 +1,117 @@
-<h2>Estadísticas</h2>
+<div class="container">
+	<h2>Estadísticas</h2>
 
-<div class="row">
-	<div class="col s12 hide-on-small-only" id="pieChart"></div>
-</div>
+	<div class="row">
+		<div class="col s12 hide-on-small-only" id="pieChart"></div>
+	</div>
 
-<div class="row">
-	<table class="col s12 m8 offset-m2 l8 offset-l2 striped">
-		<thead>
-			<tr>
-				<th>Parámetro</th>
-				<th>Valor</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Número de preguntas</td>
-				<td><%= numPreguntas %></td>
-			</tr>
-			<tr>
-				<td>Número de comentarios totales</td>
-				<td><%= numComentarios %></td>
-			</tr>
-			<tr>
-				<td>Número medio de comentarios por pregunta</td>
-				<td><%= comentariosPorPregunta %></td>
-			</tr>
-			<tr>
-				<td>Número de preguntas con comentarios</td>
-				<td><%= preguntasConComentarios %></td>
-			</tr>
-			<tr>
-				<td>Número de preguntas sin comentarios</td>
-				<td><%= preguntasSinComentarios %></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
+	<div class="row">
+		<table class="col s12 m8 offset-m2 l8 offset-l2 striped">
+			<thead>
+				<tr>
+					<th>Parámetro</th>
+					<th>Valor</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Número de preguntas</td>
+					<td><%= numPreguntas %></td>
+				</tr>
+				<tr>
+					<td>Número de comentarios totales</td>
+					<td><%= numComentarios %></td>
+				</tr>
+				<tr>
+					<td>Número medio de comentarios por pregunta</td>
+					<td><%= comentariosPorPregunta %></td>
+				</tr>
+				<tr>
+					<td>Número de preguntas con comentarios</td>
+					<td><%= preguntasConComentarios %></td>
+				</tr>
+				<tr>
+					<td>Número de preguntas sin comentarios</td>
+					<td><%= preguntasSinComentarios %></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
-<script src="/javascripts/d3pie.min.js"></script>
-<script>
-var pie = new d3pie("pieChart", {
-	"header": {
-		"title": {
-			"text": "Preguntas",
-			"fontSize": 22,
-			"font": "verdana"
-		},
-		"subtitle": {
-			"text": "Comentarios en las preguntas",
-			"color": "#999999",
-			"fontSize": 10,
-			"font": "verdana"
-		},
-		"titleSubtitlePadding": 12
-	},
-	"size": {
-		"canvasHeight": 300,
-		"canvasWidth": 400,
-		"pieInnerRadius": "40%",
-		"pieOuterRadius": "88%"
-	},
-	"data": {
-		"content": [
-			{
-				"label": "Con coment.",
-				"value": <%= preguntasConComentarios %>,
-				"color": "#387e6a"
+	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
+	<script src="/javascripts/d3pie.min.js"></script>
+	<script>
+	var pie = new d3pie("pieChart", {
+		"header": {
+			"title": {
+				"text": "Preguntas",
+				"fontSize": 22,
+				"font": "verdana"
 			},
-			{
-				"label": "Sin coment.",
-				"value": <%= preguntasSinComentarios %>,
-				"color": "#386a7e"
+			"subtitle": {
+				"text": "Comentarios en las preguntas",
+				"color": "#999999",
+				"fontSize": 10,
+				"font": "verdana"
+			},
+			"titleSubtitlePadding": 12
+		},
+		"size": {
+			"canvasHeight": 300,
+			"canvasWidth": 400,
+			"pieInnerRadius": "40%",
+			"pieOuterRadius": "88%"
+		},
+		"data": {
+			"content": [
+				{
+					"label": "Con coment.",
+					"value": <%= preguntasConComentarios %>,
+					"color": "#387e6a"
+				},
+				{
+					"label": "Sin coment.",
+					"value": <%= preguntasSinComentarios %>,
+					"color": "#386a7e"
+				}
+			]
+		},
+		"labels": {
+			"outer": {
+				"format": "label-percentage1",
+				"pieDistance": 32
+			},
+			"inner": {
+				"format": "value"
+			},
+			"mainLabel": {
+				"font": "verdana"
+			},
+			"percentage": {
+				"color": "#387e6a",
+				"font": "verdana",
+				"decimalPlaces": 0
+			},
+			"value": {
+				"color": "#e1e1e1",
+				"font": "verdana"
+			},
+			"lines": {
+				"enabled": true,
+				"color": "#cccccc"
+			},
+			"truncation": {
+				"enabled": true
 			}
-		]
-	},
-	"labels": {
-		"outer": {
-			"format": "label-percentage1",
-			"pieDistance": 32
 		},
-		"inner": {
-			"format": "value"
-		},
-		"mainLabel": {
-			"font": "verdana"
-		},
-		"percentage": {
-			"color": "#387e6a",
-			"font": "verdana",
-			"decimalPlaces": 0
-		},
-		"value": {
-			"color": "#e1e1e1",
-			"font": "verdana"
-		},
-		"lines": {
-			"enabled": true,
-			"color": "#cccccc"
-		},
-		"truncation": {
-			"enabled": true
+		"effects": {
+			"pullOutSegmentOnClick": {
+				"effect": "linear",
+				"speed": 400,
+				"size": 8
+			}
 		}
-	},
-	"effects": {
-		"pullOutSegmentOnClick": {
-			"effect": "linear",
-			"speed": 400,
-			"size": 8
-		}
-	}
-});
-</script>
+	});
+	</script>
+
+</div>

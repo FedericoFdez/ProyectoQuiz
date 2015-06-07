@@ -1,5 +1,7 @@
-<h5 class="header">Edite la pregunta</h5>
+<div class="container">
+	<h5 class="header">Edite la pregunta</h5>
 
-<form method="post" action="/quizes/<%= quiz.id %>?_method=put" enctype="multipart/form-data" >
-	<% include _form.ejs %>
-</form>
+	<form method="post" action="/quizes/<%= quiz.id %>?_method=put" enctype="multipart/form-data" >
+		<% include _form.ejs %>
+	</form>
+</div>
