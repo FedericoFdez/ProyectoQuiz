@@ -106,7 +106,7 @@ exports.index = function(req, res) {
 // GET /quizes/new
 exports.new = function(req,res) {
 	var quiz = models.Quiz.build( //crea objeto quiz
-		{pregunta: "", respuesta: ""}
+		{pregunta: " ", respuesta: " "}
 		);
 	res.render('quizes/new',{quiz:quiz, errors:[]});
 };
@@ -141,10 +141,8 @@ exports.create = function(req,res) {
 		.then(
 			function(err){
 				if(err) {
-					console.log("Errores!");
 					res.render('quizes/new', {quiz: quiz, errors: err.errors});
 				} else {
-					console.log("OK todo");
 					quiz // guarda en DB los campos pregunta y respuesta de quiz
 					.save({fields: ["pregunta", "respuesta", "UserId", "image"]})
 					.then(function(){ res.redirect('/quizes')});
