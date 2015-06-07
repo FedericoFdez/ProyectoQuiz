@@ -43,6 +43,10 @@ module.exports = function(sequelize, DataTypes){
 			isAdmin:{
 				type: DataTypes.BOOLEAN,
 				defaultValue:false
+			},
+			points:{
+				type: DataTypes.INTEGER,
+				defaultValue:0
 			}
 		},
 		{

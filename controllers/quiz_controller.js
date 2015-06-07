@@ -116,10 +116,6 @@ exports.create = function(req,res) {
 	req.body.quiz.UserId = req.session.user.id;
 	var quiz = models.Quiz.build( req.body.quiz );
 
-	console.log("Image es : "+req.files.image);
-	console.log("Pregunta es : "+quiz.pregunta);
-	console.log("Respuesta es: "+quiz.respuesta);
-
 	quiz.validate()
 	.then(
 		function(err){
@@ -164,10 +160,30 @@ exports.show = function(req, res) {
 
 // GET /quizes/:id/answer
 exports.answer = function(req, res) {
-	if (req.query.respuesta === req.quiz.respuesta) {
-		res.render('quizes/answer', { quiz:req.quiz, respuesta: 'Correcto', errors:[] });
+	if(req.session.user){
+		models.User.find({ where: { id: Number(req.session.user.id)},
+					   include: [{model: models.Quiz }] })
+		.then(function(user){
+			if(user){
+				if (req.query.respuesta === req.quiz.respuesta) {
+					user.points++;
+					req.session.user.points++;
+					res.render('quizes/answer', { quiz:req.quiz, respuesta: 'Correcto', errors:[] });
+				} else {
+					user.points--;
+					req.session.user.points--;
+					res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors:[] });
+				}
+			}else{
+				next(new Error('No existe userId=' + userId));
+			}
+		}).catch(function(error){next(error)});
 	} else {
-		res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors:[] });
+		if (req.query.respuesta === req.quiz.respuesta) {
+			res.render('quizes/answer', { quiz:req.quiz, respuesta: 'Correcto', errors:[] });
+		} else {
+			res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors:[] });
+		}
 	}
 };
 

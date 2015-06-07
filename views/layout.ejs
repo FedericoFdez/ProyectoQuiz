@@ -54,7 +54,11 @@
                     <img src="/images/default-user-img.png" class="responsive-img circle" />
                   </div>
                   <div class="col s8 valign-wrapper">
-                    <h5 class="header teal-text"><%= session.user.username %></h5>
+                    <h5 class="header teal-text">
+                      <%= session.user.username %>
+                      <span class="badge <% if(session.user.points<0){%>negative<%}else{%>positive<%}%>"><%=session.user.points%>
+                      </span>
+                    </h5>
                   </div>
                 </div>
                 <div class="divider"></div>
