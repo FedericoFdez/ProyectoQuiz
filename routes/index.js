@@ -8,6 +8,7 @@ var sessionController = require('../controllers/session_controller');
 var userController = require('../controllers/user_controller');
 var statisticController = require('../controllers/statistic_controller');
 var favouritesController = require('../controllers/favourites_controller');
+var rankingController = require('../controllers/ranking_controller');
 
 // Página de entrada (home page)
 router.get('/', function(req, res) {
@@ -66,6 +67,9 @@ router.delete('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)',
 
 // Definición de rutas de estadísticas
 router.get('/quizes/statistics',			statisticController.index);
+
+// Definición de rutas de ranking
+router.get('/ranking',						rankingController.index);
 
 // Definición de rutas de favoritos
 router.get('/user/:userId(\\d+)/favourites',					sessionController.loginRequired,

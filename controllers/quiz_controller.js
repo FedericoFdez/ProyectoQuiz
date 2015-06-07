@@ -167,12 +167,20 @@ exports.answer = function(req, res) {
 			if(user){
 				if (req.query.respuesta === req.quiz.respuesta) {
 					user.points++;
-					req.session.user.points++;
-					res.render('quizes/answer', { quiz:req.quiz, respuesta: 'Correcto', errors:[] });
+					console.log("Puntos: "+user.points);
+					user.save({fields: ["points"]})
+					.then(function(){
+						req.session.user.points++;
+						res.render('quizes/answer', { quiz:req.quiz, respuesta: 'Correcto', errors:[] });
+					});
 				} else {
 					user.points--;
-					req.session.user.points--;
-					res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors:[] });
+					console.log("Puntos: "+user.points);
+					user.save({fields: ["points"]})
+					.then(function(){
+						req.session.user.points--;
+						res.render('quizes/answer', { quiz: req.quiz, respuesta: 'Incorrecto', errors:[] });
+					});
 				}
 			}else{
 				next(new Error('No existe userId=' + userId));

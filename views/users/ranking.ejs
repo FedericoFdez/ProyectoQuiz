@@ -1,0 +1,38 @@
+<div class="container">
+	<h5 class="header">Ranking de Jugadores</h5>
+	
+	<div class="row">
+		<table class="col s12 m8 offset-m2 l8 offset-l2 centered hoverable">
+			<thead>
+				<tr>
+					<th>Posición</th>
+					<th>Avatar</th>
+					<th>Nickname</th>
+					<th>Sabiduría</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% for (var i=0; i<users.length; i++){ %>
+					<tr>
+						<td>
+							<%=i+1%>
+						</td>
+						<td>
+							<% if (users[i].face) { %>
+		                      <%- cloudinary.image(users[i].face, {
+		                            width: 64, height: 64, 
+		                            crop: 'fill', gravity: 'face',
+		                            alt: "Imagen de perfil", class:"responsive-img circle"
+		                          }) %>
+		                    <% } else { %>
+		                      <img src="/images/default-user-img.png" height="64" width="64" class="responsive-img circle" />
+		                    <% } %>
+		                </td>
+						<td><%=users[i].username%></td>
+						<td><span class="points <% if(users[i].points<0){%>negative<%}else{%>positive<%}%>">  <%=users[i].points%></span></td>
+					</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+</div>

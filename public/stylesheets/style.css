@@ -37,7 +37,7 @@ header, footer, main {
 }
 
 .parallax-container {
-  height: 200px;
+  height: 400px;
 }
 
 .centrado {
@@ -51,21 +51,39 @@ header, footer, main {
   margin-right: auto !important;
 }
 
-span.badge.positive {
+span.badge.positive, span.badge.negative {
   font-weight: 300;
   font-size: 0.8rem;
   color: #fff;
-  background-color: #4caf50;
   border-radius: 2px;
 }
-span.badge.positive:before, span.badge.negative:before {
+
+span.badge.positive:before{
+  content: "Sabiduría: +";
+}
+
+span.badge.negative:before {
   content: "Sabiduría: ";
 }
 
-span.badge.negative {
-  font-weight: 300;
-  font-size: 0.8rem;
-  color: #fff;
+span.badge.positive, span.points.positive{
+  background-color: #4caf50;
+}
+
+span.points.positive:before{
+  content: "+";
+}
+
+span.badge.negative, span.points.negative{
   background-color: #9c27b0;
-  border-radius: 2px;
+}
+
+span.points{
+  min-width: 3rem;
+  padding: 0 6px;
+  text-align: center;
+  font-weight: 300;
+  font-size: 1.2rem;
+  color: #fff;
+  border-radius: 10px;
 }
