@@ -40,7 +40,7 @@
           <ul class="right hide-on-med-and-down">
             <% if(!session.user){ %>
               <li><a href="/user">Sign up</a></li>
-              <li><a href="/login">Sign in</a></li>
+              <li><a href="/login">Login</a></li>
             <% } else { %>
               <li><a href="/user/<%=session.user.id%>/edit">Settings</a></li>
               <li><a href="/logout">Logout</a></li>
@@ -71,7 +71,7 @@
 
             <% if(!session.user){ %>
               <li class="hide-on-large-only"><a href="/user">Sign up</a></li>
-              <li class="hide-on-large-only"><a href="/login">Sign in</a></li>
+              <li class="hide-on-large-only"><a href="/login">Login</a></li>
             <% } else {%>
               <li class="hide-on-large-only"><a href="/user/<%=session.user.id%>/edit"><i class="mdi-action-settings left"></i>Settings</a></li>
               <li class="hide-on-large-only"><a href="/logout"><i class="mdi-action-exit-to-app left"></i>Logout</a></li>
