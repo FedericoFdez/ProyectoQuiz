@@ -59,6 +59,10 @@ router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish',
 													sessionController.loginRequired, 
 													commentController.ownershipRequired, 
 													commentController.publish);
+router.delete('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)',
+													sessionController.loginRequired,
+													commentController.ownershipRequired,
+													commentController.destroy);
 
 // Definición de rutas de estadísticas
 router.get('/quizes/statistics',			statisticController.index);

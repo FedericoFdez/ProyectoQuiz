@@ -76,3 +76,10 @@ exports.publish = function(req,res){
 		res.redirect('/quizes/'+req.params.quizId);
 	}).catch(function(error){ next(error)});
 };
+
+// DELETE /quizes/:quizId/comments/:commentId
+exports.destroy = function(req,res){
+	req.comment.destroy().then(function() {
+		res.redirect('/quizes/'+req.quiz.id);
+	}).catch(function(error){next(error)});
+};

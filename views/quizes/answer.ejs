@@ -1,2 +1,9 @@
-<p><%= respuesta %></p>
-<a href="/quizes/<%= quiz.id %>">Volver</a>
+<% if (respuesta==='Correcto'){%>
+<h5 class="green-text">
+	<%= respuesta %>      <i class="mdi-navigation-check"></i>
+<% } else { %>
+<h5 class="red-text">
+	<%= respuesta %>      <i class="mdi-navigation-cancel"></i>
+<% } %>
+</h5>
+<a class="btn waves-effect" href="/quizes/<%= quiz.id %>"><i class="left mdi-navigation-arrow-back"></i>Volver</a>

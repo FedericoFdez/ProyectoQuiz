@@ -1,8 +1,26 @@
-<label for="preg" class="rem">Pregunta:</label>
-<input type="text" id="preg" name="quiz[pregunta]" value="<%= quiz.pregunta %>"/> <p>
-<label for="resp" class="rem">Respuesta:</label>
-<input type="text" id="resp" name="quiz[respuesta]" value="<%= quiz.respuesta %>"/> <p>
-<label for="image" class="rem">Imagen:</label>
-<input type="file" accept="image/*" id="image" name="image"/></p>
-<a href="/quizes"><button type="button">Cancelar</button></a>
-<input type="submit" value="Guardar">
+<div class="row">
+	<div class="input-field col s12">
+		<input type="text" id="preg" name="quiz[pregunta]" value="<%= quiz.pregunta %>"/>
+		<label for="preg">Pregunta</label>
+	</div>
+
+	<div class="input-field col s12">
+		<input type="text" id="resp" name="quiz[respuesta]" value="<%= quiz.respuesta %>"/>
+		<label for="resp">Respuesta</label>
+	</div>
+</div>
+
+<div class="file-field input-field">
+	<input class="file-path" type="text"/>
+	<div class="btn">
+        <span>Foto</span>
+    	<input type="file" accept="image/*" id="image" name="image"/>
+    </div>
+</div>
+
+
+<div class="row">
+	<a type="button" href="/quizes" class="btn waves-effect waves-light">Cancelar</a>
+	<button class="btn waves-effect waves-light" type="submit">Guardar<i class="mdi-content-save right"></i>
+	</button>
+</div>

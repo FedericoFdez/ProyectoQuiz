@@ -2,64 +2,145 @@
 <html lang="en">
   <head>
   	<meta charset="utf-8"><title> Preguntas </title>
-    <link rel='stylesheet' type='text/css' href='/stylesheets/style.css' />
-    <link rel='stylesheet' 
-          type='text/css' 
-          media='only screen and (min-width: 530px) and (min-device-width: 481px)' 
-          href='/stylesheets/wide.css' />
-    <link rel='stylesheet' 
-          type='text/css' 
-          media='only screen and (max-width: 480px)' 
-          href='/stylesheets/smartphone.css' />
+    
+    <!-- Import materialize.css -->
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/extra.css"  media="screen,projection"/>
+
+    <!-- Android 5 Chrome Color -->
+    <meta name="theme-color" content="#009688">
+
+    <!-- Let browser know website is optimized for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+
   </head>
 
   <body>
-  	<div id="page-wrap">
-  		<header class="main" id="h1">
-      
-        <%if(!session.user){%>
-          <span class="right">
-            <a href="/user">Sign up</a> - 
-            <a href="/login">Login</a>
-          </span>
-        <%} else {%>
-          <span class="right">
-            <%= session.user.username%> - 
-            <a href="/user/<%=session.user.id%>/edit">Settings</a> - 
-            <a href="/logout">Logout</a>
-          </span>
-        <% } %>
 
-  			<h2>Quiz<span>: el juego de las preguntas</span></h2>
-  		</header>
-
-  		<nav clas="main" id="n1" role="navigation">
-  			<span><a href="/">Inicio</a></span>
-  			<span><a href="/quizes">Preguntas</a></span>
-        <% if(session.user) { %>
-          <span><a href="/user/<%= session.user.id %>/quizes">Mis Preguntas</a></span>
-          <span><a href="/user/<%= session.user.id %>/favourites">Favoritos</a></span>
-        <% } %>
-        <span><a href="/quizes/statistics">Estadísticas</a></span>
-        <span><a href="/author">Créditos</a></span>
-  		</nav>
-
-  		<section class="main" id="s1">
-        <% if (errors.length) { %>
-          <span id='ErrorMsgs'>
-            Corregir errores:<br/>
-            <% for (var i in errors) { %>
-              <span> <%= errors[i].message %> </span><br/>
+    <header>
+      <nav class="teal darken-2" role="navigation">
+        <div class="nav-wrapper container">
+          <a class="brand-logo center">Quiz</a>
+          <ul class="right hide-on-med-and-down">
+            <% if(!session.user){ %>
+              <li><a href="/user">Sign up</a></li>
+              <li><a href="/login">Login</a></li>
+            <% } else { %>
+              <li><a href="/user/<%=session.user.id%>/edit">Settings</a></li>
+              <li><a href="/logout">Logout</a></li>
             <% } %>
-          </span>
-        <% } %>
+          </ul>
+          <ul id="nav-mobile" class="side-nav fixed">
+            <% if (session.user) { %>
+              <li class="logo">
+                <div class="row valign-wrapper">
+                  <div class="col s4 valign-wrapper">
+                    <img src="/media/default-user-img.png" class="responsive-img circle" />
+                  </div>
+                  <div class="col s8 valign-wrapper">
+                    <h5 class="header teal-text"><%= session.user.username %></h5>
+                  </div>
+                </div>
+                <div class="divider"></div>
+              </li>
+            <% } %>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/quizes">Preguntas</a></li>
+            <% if(session.user) { %>
+              <li><a href="/user/<%= session.user.id %>/quizes">Mis Preguntas</a></li>
+              <li><a href="/user/<%= session.user.id %>/favourites">Favoritos</a></li>
+            <% } %>
+            <li><a href="/quizes/statistics">Estadísticas</a></li>
+            <li><a href="/author">Créditos</a></li>
 
-  		  <div><%- body %></div>
-  		</section>
+            <% if(!session.user){ %>
+              <li class="hide-on-large-only"><a href="/user">Sign up</a></li>
+              <li class="hide-on-large-only"><a href="/login">Login</a></li>
+            <% } else {%>
+              <li class="hide-on-large-only"><a href="/user/<%=session.user.id%>/edit"><i class="mdi-action-settings left"></i>Settings</a></li>
+              <li class="hide-on-large-only"><a href="/logout"><i class="mdi-action-exit-to-app left"></i>Logout</a></li>
+            <% } %>
+          </ul>
+          <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+        </div>
+      </nav>
+    </header>
 
-  		<footer class="main" id="f1">
-  			<a href="http://es.wikipedia.org/wiki/Quiz">¿Qué es un Quiz?</a>
-  		</footer>
-  	</div>
+    <main>
+      <div class="container">
+          <section>
+          <div class="row center">
+            <% if (errors.length) { %>
+              <div class="col s12 m8 offset-m2 l6 offset-l3">
+                <div class="card-panel orange accent-3">
+                    <div class="row valign-wrapper">
+                      <div class="col s2">
+                        <i class="small mdi-alert-error left"></i>
+                      </div>
+                      <div class="col s10">
+                        <span class="left">Corregir errores:<br/>
+                        <% for (var i in errors) { %>
+                          <br/><%= errors[i].message %>
+                        <% } %>
+                        </span>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            <% } %>    
+          </div>
+          <div class="row center">
+            <%- body %>
+          </div>
+          </section>
+      </div>
+    </main>
+
+		<footer class="page-footer teal lighten-4">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="teal-text">Descripción del sitio</h5>
+            <p class="grey-text">Proyecto final de la asignatura Computación en Red - Escuela Técnica Superior de Ingenieros de Telecomunicación</p>
+          </div>
+          <div class="col l6 s12">
+            <h5 class="teal-text">Enlaces interesantes</h5>
+            <ul>
+              <li><a class="grey-text" href="http://es.wikipedia.org/wiki/Quiz">¿Qué es un Quiz?</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="divider"></div>
+          <p class="hide-on-med-and-down grey-text">Wide layout</p>
+          <p class="hide-on-small-only hide-on-large-only grey-text">Medium layout</p>
+          <p class="hide-on-med-and-up grey-text">Smartphone layout</p>
+      </div>
+      <div class="footer-copyright valign-wrapper">
+        <div class="container">
+          <p>CORE-UPM. Junio 2015.</p>
+        </div>
+		</footer>
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+    <script type="text/javascript" src="/javascripts/index.js"></script>
+
   </body>
 </html>

@@ -1,0 +1,52 @@
+header, footer, main {
+	padding-left: 240px;
+}
+
+@media only screen and (max-width : 992px) {
+    header, main, footer {
+      padding-left: 0;
+    }
+}
+
+.logo {
+  padding-top:10px !important;
+}
+
+.logo:hover {
+  background-color: transparent !important;
+}
+
+.link-like {
+	background:none; border:none; margin:0; padding:0;
+	color: #ffab40;
+  margin-right: 20px;
+  -webkit-transition: color .3s ease;
+  -moz-transition: color .3s ease;
+  -o-transition: color .3s ease;
+  -ms-transition: color .3s ease;
+  transition: color .3s ease;
+  text-transform: uppercase;
+}
+.link-like:hover, .link-like:active, {
+	color: #ffd8a6; 
+	background-color: transparent;
+}
+
+#search {
+  margin-bottom: 30px;
+}
+
+.parallax-container {
+  height: 200px;
+}
+
+.centrado {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-top: 2.5em !important;
+}
+
+.menu-opt {
+  float:right !important;
+  margin-right: auto !important;
+}

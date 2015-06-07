@@ -1,76 +1,93 @@
-<form method="get" action="
-						<% if(propios){ %>
-							/user/<%=session.user.id%>/quizes
-						<% } else { %>
-							/quizes
-						<% } %>
-						">
-	<input type="text" name="search" value="Buscar preguntas" />
-	<input type="submit" value="Search">
-</form>
+<nav id="search" class="teal lighten-2">
+    <div class="nav-wrapper z-depth-2">
+      <form method="get" action="
+		<% if(propios){ %>
+			/user/<%=session.user.id%>/quizes
+		<% } else { %>
+			/quizes
+		<% } %>
+">
+        <div class="input-field">
+          <input name="search" type="search" <% if(busqueda){ %> value="<%=busqueda%>" <%}%>>
+          <label for="search"><i class="mdi-action-search"></i></label>
+          <i class="mdi-navigation-close"></i>
+        </div>
+      </form>
+    </div>
+</nav>
 
-<%
-	if (busqueda){
-%>
-	<h3>Preguntas con "<%= busqueda %>"</h3>
-<%
-	}
-%>
+<% if(session.user){ %>
+	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+	    <a class="btn-floating btn-large amber accent-4" href="/quizes/new">
+	      <i class="large mdi-editor-mode-edit"></i>
+	    </a>
+	    <ul>
+	</div>
 
-<table>
-<% 
-	var i;
-	for (i=0; i<quizes.length; i++){
-%>
-		<tr>
-			<td><a href="/quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></a></td>
+<% } %>
 
-			<% if(session.user){ 
-					if(quizes[i].isFavourite) {%>
-						<td>
-							<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=delete">
-								<% if(propios) {%>
-									<input type="hidden" name="origin" value="own" />
-								<% } else { %>
-									<input type="hidden" name="origin" value="all" />
-								<% } %>
-								<button class="delete_favourite" type="submit" onClick="return confirm('¿Eliminar favorito?');">
-									&#9733;
-								</button>
-							</form>
-						</td>
-					<% } else { %>
-						<td>
-							<form method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=put">
-								<% if(propios) {%>
-									<input type="hidden" name="origin" value="own" />
-								<% } else { %>
-									<input type="hidden" name="origin" value="all" />
-								<% } %>
-								<button class="add_favourite" type="submit">
-									&#9733;
-								</button>
-							</form>
-						</td>
-					<% }
-				if (session.user.isAdmin || session.user.id === quizes[i].UserId) {%>
-					<td><a href="/quizes/<%= quizes[i].id %>/edit"><button>editar</button></a></td>
-					<td>
-						<form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
-							<button type="submit" onClick="return confirm('Borrar: <%= quizes[i].pregunta %>');">
-								borrar
+<div class="row">
+
+	<% var i;
+	for (i=0; i<quizes.length; i++){ %>
+
+			<div class="col s12 m6 l4">
+	          <div class="card teal">
+	            <div class="card-content">
+	              <span class="card-title"><%= quizes[i].pregunta %></span>
+	            </div>
+	            <div class="card-action valign-wrapper">
+	              <a href='/quizes/<%= quizes[i].id %>'>Resolver quiz</a>
+
+	              <% if(session.user){%>
+	              	<span class="activator link-like menu-opt"><i class="mdi-navigation-more-vert right small waves-effect"></i></span>
+	            </div>
+
+	            <div class="card-reveal">
+	            	<span class="card-title teal-text text-darken-4">Opciones<i class="mdi-navigation-close right teal-text"></i></span>
+
+	            	<div class="valign-wrapper">
+
+	              	<% if (session.user.isAdmin || session.user.id === quizes[i].UserId) {%>
+	              		<form class="centrado" method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+	              			<a href="/quizes/<%= quizes[i].id %>/edit" class="link-like">Editar</a>
+							<button class="link-like" type="submit" onClick="return confirm('Borrar: <%=quizes[i].pregunta%>?');">
+								Borrar
 							</button>
 						</form>
-					</td>
-				<% }
-			} %>
-		</tr>
-<%	}
-%>
-</table>
+	              	<% }
+	              	if(quizes[i].isFavourite) {%>
+						<form class="centrado" method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=delete">
+							<% if(propios) {%>
+								<input type="hidden" name="origin" value="own" />
+							<% } else { %>
+								<input type="hidden" name="origin" value="all" />
+							<% } %>
+							<button class="link-like" type="submit" onClick="return confirm('¿Eliminar favorito?');">
+								<i class="mdi-action-favorite small"></i>
+							</button>
+						</form>
+					<% } else { %>
+						<form class="centrado" method="post" action="/user/<%=session.user.id%>/favourites/<%=quizes[i].id%>?_method=put">
+							<% if(propios) {%>
+								<input type="hidden" name="origin" value="own" />
+							<% } else { %>
+								<input type="hidden" name="origin" value="all" />
+							<% } %>
+							<button class="link-like" type="submit">
+								<i class="mdi-action-favorite-outline small"></i>
+							</button>
+						</form>
+					<% } %>
 
-<p>
+					</div>
 
-<% if(session.user) {%>
-	<a href="/quizes/new"><button type="button">Crear pregunta</button></a>
-<% } %>
+	              <% } %>
+
+	            </div>
+	          </div>
+			</div>
+
+	<% } %>
+
+</div>

@@ -1,11 +1,16 @@
-<p>Editar información de la cuenta:</p>
+<h5 class="header">Crear usuario</h5>
+<div class="container">
 
-<form method="post" action="/user/<%= user.id %>?_method=put">
-	<% include _form.ejs %>
-</form>
+	<form method="post" action="/user/<%= user.id %>?_method=put">
+		<% include _form.ejs %>
+	</form>
 
-<form method="post" action="/user/<%= user.id %>?_method=delete">
-	<button type="submit" onClick="return confirm('Borrar cuenta: <%= user.username %>');">
-	Eliminar cuenta
-	</button>
-</form>
+	<form method="post" action="/user/<%= user.id %>?_method=delete">
+		<div class="input-field col s12">
+			<button class="btn waves-effect waves-light red" type="submit" onClick="return confirm('Borrar cuenta: <%= user.username %>');">
+			Eliminar cuenta
+			</button>
+		</div>
+	</form>
+
+</div>
