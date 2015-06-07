@@ -89,20 +89,29 @@ exports.create = function(req,res){
 
 // PUT /user/:id
 exports.update = function(req,res,next){
-	req.user.username = req.body.user.username;
-	req.user.password = req.body.user.password;
-
-	req.user
-	.validate()
-	.then(function(err){
-		if(err){
-			res.render('users/'+req.user.id, { user: req.user, errors: err.errors});
-		} else {
-			req.user
-			.save( {fields: ["username", "password"]}) // guarda username y password en DB
-			.then( function(){ res.redirect('/');}); // redirección HTTP a /
+	var userController = require('./user_controller');
+	userController.autenticar(req.user.username, req.body.oldPassword, function(error, user) {
+		if (error) { // si hay error retornamos mensajes de error de sesión
+			req.session.errors = [{"message": 'Se ha producido un error: '+error}];
+			res.render("users/edit", { user: req.user, errors:req.session.errors });
+			return;
 		}
-	}).catch(function(error){next(error)});
+		// Actualizar campos
+		req.user.username = req.body.user.username;
+		req.user.password = req.body.user.password;
+
+		req.user
+		.validate()
+		.then(function(err){
+			if(err){
+				res.render('users/edit', { user: req.user, errors: err.errors});
+			} else {
+				req.user
+				.save( {fields: ["username", "password"]}) // guarda username y password en DB
+				.then( function(){ res.redirect('/');}); // redirección HTTP a /
+			}
+		}).catch(function(error){next(error)});
+		});
 };
 
 // DELETE /user/:id

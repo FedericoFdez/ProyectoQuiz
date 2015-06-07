@@ -2,7 +2,17 @@
 <div class="container">
 
 	<form method="post" action="/user/<%= user.id %>?_method=put">
-		<% include _form.ejs %>
+		<div class="row">
+			<div class="input-field col s12">
+				<i class="mdi-action-lock prefix"></i>
+				<input class="validate" type="password" id="oldPassword" name="oldPassword"/>
+				<label for="oldPassword">Old password</label>
+			</div>
+		</div>
+		<div class="divider"></div>
+		<div class="section">
+			<% include _form.ejs %>
+		</div>
 	</form>
 
 	<form method="post" action="/user/<%= user.id %>?_method=delete">
