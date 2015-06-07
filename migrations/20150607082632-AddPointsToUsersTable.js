@@ -7,7 +7,7 @@ module.exports = {
   },
 
   down: function (migration, DataTypes, done) {
-    migration.removeColumn('Quizzes','UserId');
+    migration.removeColumn('Users','points');
     done();
   }
 };
