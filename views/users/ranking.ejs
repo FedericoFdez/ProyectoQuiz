@@ -15,7 +15,12 @@
 				<% for (var i=0; i<users.length; i++){ %>
 					<tr>
 						<td>
-							<%=i+1%>
+							<% switch(i){
+								case 0: %><i class="small mdi-image-looks-one amber-text darken-4"></i><% break;
+								case 1: %><i class="small mdi-image-looks-two grey-text darken-1"></i><% break;
+								case 2: %><i class="small mdi-image-looks-3 brown-text"></i><% break;
+								default:%><%=i+1%>
+							<% }%>
 						</td>
 						<td>
 							<% if (users[i].face) { %>
