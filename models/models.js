@@ -60,7 +60,8 @@ exports.User = User;
 User.count().then(function(count){
 	if(count === 0){ // la tabla se inicializa solo si está vacía
 		User.bulkCreate(
-			[	{username: 'admin', 		password: '1234', isAdmin: true},
+			[	{username: 'admin', 		password: '1234',			face: 'admin-lxpbeq', isAdmin: true,},
+
 				{username: 'pepe',  		password: '5678', 			points: 0}, // is Admin por defecto: 'false',
 				{username: 'captain', 		password: 'captain', 		face: 'aldnmc38rm8t6lilr5yl', 		points: 17},
 				{username: 'iron_man', 		password: 'iron_man', 		face: '124478-123225_rb2yhk', 		points: 10},
@@ -73,9 +74,19 @@ User.count().then(function(count){
 			Quiz.count().then(function(count){
 				if(count === 0) {		// la tabla se inicializa solo si está vacía
 					Quiz.bulkCreate(	// estos quizes pertenecen al usuario pepe (2)
-						[	{pregunta: '¿Cuál es la capital de Italia?',	respuesta: 'Roma',		UserId:2, image: 'cv4ztientykbiirnsorp'},
-							{pregunta: '¿Cuál es la capital de Alemania?',	respuesta: 'Berlín',	UserId:2, image: 'Berlin_efm6g'},
-							{pregunta: '¿Cuál es la capital de España?',	respuesta: 'Madrid',	UserId:2, image: 'gq6zkjseymfrjpe14vno'}
+						[	{pregunta: '¿Cuál es la capital de Italia?',	respuesta: 'Roma',			UserId:2, image: 'cv4ztientykbiirnsorp'},
+							{pregunta: '¿Cuál es la capital de Alemania?',	respuesta: 'Berlín',		UserId:2, image: 'Berlin_efm6g'},
+							{pregunta: '¿Cuál es la capital de España?',	respuesta: 'Madrid',		UserId:2, image: 'gq6zkjseymfrjpe14vno'},
+							{pregunta: '¿A qué país pertenece la Isla de Pascua?', 
+																			respuesta: 'Chile', 		UserId:3, image: 'Isla-de-Pascua-Chile_c9gvnw'},
+							{pregunta: '¿Cómo fue utilizada Alcatraz?', 	respuesta: 'Como prisión',	UserId:3, image: 'Alcatraz_jzsw33'},
+							{pregunta: '¿Qué país de América del Sur es el único en tener costa en el Caribe y el Pacífico?', 
+																			respuesta: 'Colombia', 		UserId:2, image: '5370398094_a67705873a_b_tqqgtk'},
+							{pregunta: '¿Cuáles fueron las primeras palabras que pronunció Neil Armstrong desde la luna para la torre de control en la Tierra?',
+																			respuesta: 'Houston, aquí Base Tranquilidad, el Águila ha aterrizado',
+																										UserId:3, image: 'dpwy1zm5vvwpypjr1u7d_tfm4nb'},
+							{pregunta: '¿Cuál era la nacionalidad de Marco Polo?',
+																			respuseta: 'Italiano',		UserId:3, image: '1502_hfznat' }
 						]
 					).then(function(){
 						Comment.bulkCreate(
