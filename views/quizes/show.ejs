@@ -66,11 +66,13 @@
 						<div class="card-content">
 							<p><%=quiz.Comments[index].texto%></p>
 						</div>
+						<% if(session.user && (session.user.isAdmin || (session.user && quiz.UserId === session.user.id))) { %>
 						<div class="card-action">
 							<form method="post" action="/quizes/<%= quiz.id %>/comments/<%=quiz.Comments[index].id%>?_method=delete">
 								<button type="submit" class="link-like" onClick="return confirm('Seguro que desea borrar el comentario?');">Borrar</button>
 							</form>
 						</div>
+						<% } %>
 					</div>
 				</div>
 				<%} else if(session.user && (session.user.isAdmin || (session.user && quiz.UserId === session.user.id))) {%>
